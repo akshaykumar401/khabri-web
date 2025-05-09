@@ -5,6 +5,10 @@ import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from './Pages/Home.jsx';
+import UploadPost from "./Pages/UploadPost.jsx";
+import User from "./Pages/User.jsx";
+import EditProfileDetail from "./Pages/EditProfileDetail.jsx";
+import EditProfilePhoto from "./Pages/EditProfilePhoto.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +19,22 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home/>,
       },
-
+      {
+        path: "/upload-post",
+        element: <UploadPost />,
+      },
+      {
+        path: "/user",
+        element: <User />,
+      },
+      {
+        path: "/edit-profile-detail",
+        element: <EditProfileDetail />,
+      },
+      {
+        path: "/edit-profile-photo",
+        element: <EditProfilePhoto />,
+      }
     ]
   }
 ]);
