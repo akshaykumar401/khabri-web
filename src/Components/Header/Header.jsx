@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faUpload, faUser, faGear, faCaretDown, faRightFromBracket, faTrashCan, faUserPen, faPenToSquare, faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
+import { Switch, DeleteAccountAlert, LogoutAccountAlert } from "../Components.js";
 
 const Header = () => {
   const [isSettingMenuOpen, setIsSettingMenuOpen] = useState(false);
   const [isListOpen, setIsListOpen] = useState(false);
+  const [isShowDeleteAccountAlert, setIsShowDeleteAccountAlert] = useState(false);
+  const [isShowLogoutAccountAlert, setIsShowLogoutAccountAlert] = useState(false);
 
   // Hendling Display Setting Menu Cilck...
   const diplayAllSettingMenu = () => {
@@ -18,7 +21,7 @@ const Header = () => {
       setIsSettingMenuOpen(!isSettingMenuOpen);
     } else {
       settingArrow.style.transform = "rotate(180deg)";
-      allSettingMenu.style.height = "110px";
+      allSettingMenu.style.height = "130px";
       setIsSettingMenuOpen(!isSettingMenuOpen);
     }
   }
@@ -31,16 +34,31 @@ const Header = () => {
       list.style.height = "0px";
       setIsListOpen(!isListOpen);
     } else {
-      list.style.height = "450px";
+      list.style.height = "460px";
       setIsListOpen(!isListOpen);
     }
   }
 
+  // Delete Account Alert Button Event Handler...
+  const deleteAccountAlert = () => {
+    setIsShowLogoutAccountAlert(false);
+    setIsShowDeleteAccountAlert(true);
+  }
+
+  // Logout Alert Button Event Handler...
+  const logoutAlert = () => {
+    setIsShowDeleteAccountAlert(false);
+    setIsShowLogoutAccountAlert(true);
+  }
+
   return (
     <div className="w-full">
+      {isShowDeleteAccountAlert && <DeleteAccountAlert setIsShowDeleteAccountAlert={setIsShowDeleteAccountAlert}/>}
+      {isShowLogoutAccountAlert && <LogoutAccountAlert setIsShowLogoutAccountAlert={setIsShowLogoutAccountAlert} />}
+
       {/* Nav Bar Code. */}
       <div className="bg-slate-300 fixed z-10 text-black dark:bg-slate-950 dark:text-white w-full h-12 font-semibold text-3xl flex items-center md:justify-center justify-between gap-4 px-16 font-['Tagesschrift'] drop-shadow-xl">
-        <span className="drop-shadow-xl/50">Khabri</span>
+        <span className=" drop-shadow-xl/50">Khabri</span>
 
         <button className="md:hidden block cursor-pointer" onClick={displayList}>
           <FontAwesomeIcon icon={faBarsStaggered}/>
@@ -115,17 +133,20 @@ const Header = () => {
                 </NavLink>
               </li>
               <li className="pt-1">
-                <button className="flex gap-2 items-center cursor-pointer">
+                <button className="hover:text-red-600 duration-150 ease-in-out flex gap-2 items-center cursor-pointer" onClick={deleteAccountAlert}>
                   <FontAwesomeIcon icon={faTrashCan} className="text-[16px]" />
                   <span>
                     Delete Account
                   </span>
                 </button>
               </li>
+              <li className="pt-1">
+                <Switch />
+              </li>
             </ul>
 
             <li>
-              <button className="flex items-center w-[288px] p-2 space-x-3 rounded-md cursor-pointer">
+              <button className="hover:text-red-600 duration-150 ease-in-out flex items-center w-[288px] p-2 space-x-3 rounded-md cursor-pointer" onClick={logoutAlert}>
                 <FontAwesomeIcon icon={faRightFromBracket} className="text-xl" />
                 <span>Logout</span>
               </button>
