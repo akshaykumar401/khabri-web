@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faUpload, faUser, faGear, faCaretDown, faRightFromBracket, faTrashCan, faUserPen, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faUpload, faUser, faGear, faCaretDown, faRightFromBracket, faTrashCan, faUserPen, faPenToSquare, faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
   const [isSettingMenuOpen, setIsSettingMenuOpen] = useState(false);
+  const [isListOpen, setIsListOpen] = useState(false);
 
   // Hendling Display Setting Menu Cilck...
   const diplayAllSettingMenu = () => {
@@ -13,23 +14,40 @@ const Header = () => {
 
     if(isSettingMenuOpen) {
       settingArrow.style.transform = "rotate(0deg)";
-      allSettingMenu.style.display = "none";
+      allSettingMenu.style.height = "0px";
       setIsSettingMenuOpen(!isSettingMenuOpen);
     } else {
       settingArrow.style.transform = "rotate(180deg)";
-      allSettingMenu.style.display = "block";
+      allSettingMenu.style.height = "110px";
       setIsSettingMenuOpen(!isSettingMenuOpen);
+    }
+  }
+
+  // Display List Method....
+  const displayList = () => {
+    const list = document.getElementById("fullList");
+
+    if (isListOpen) {
+      list.style.height = "0px";
+      setIsListOpen(!isListOpen);
+    } else {
+      list.style.height = "450px";
+      setIsListOpen(!isListOpen);
     }
   }
 
   return (
     <div className="w-full">
       {/* Nav Bar Code. */}
-      <div className="bg-slate-300 fixed z-10 text-black dark:bg-slate-950 dark:text-white w-full h-12 font-semibold text-3xl flex items-center justify-center gap-4 px-16 font-['Tagesschrift'] drop-shadow-xl">
+      <div className="bg-slate-300 fixed z-10 text-black dark:bg-slate-950 dark:text-white w-full h-12 font-semibold text-3xl flex items-center md:justify-center justify-between gap-4 px-16 font-['Tagesschrift'] drop-shadow-xl">
         <span className="drop-shadow-xl/50">Khabri</span>
+
+        <button className="md:hidden block cursor-pointer" onClick={displayList}>
+          <FontAwesomeIcon icon={faBarsStaggered}/>
+        </button>
       </div>
 
-      <div className="h-full p-3 space-y-2 w-[300px] bg-slate-300 dark:bg-slate-950 dark:text-white text-black border-t border-t-gray-50 dark:border-t-white fixed top-12 left-0 drop-shadow-xl/50">
+      <div className="md:h-full h-0 md:p-3 space-y-2 md:w-[300px] w-full z-50 flex flex-col justify-start items-center bg-slate-300 dark:bg-slate-950 dark:text-white text-black border-t border-t-gray-50 dark:border-t-white fixed top-12 left-0 drop-shadow-xl/50  md:block overflow-hidden duration-300 ease-in-out" id="fullList">
         <div className="flex items-center p-2 space-x-4">
           <img
             src="https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc"
@@ -49,19 +67,19 @@ const Header = () => {
         <div className="divide-y dark:divide-gray-300">
           <ul className="pt-2 pb-4 space-y-1 text-sm">
             <li className="dark:text-white">
-              <NavLink to='/' className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out justify-start`}>
+              <NavLink to='/' className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out justify-start`}>
                 <FontAwesomeIcon icon={faHouse} className="text-xl" />
-                <spma>Home</spma>
+                <span>Home</span>
               </NavLink>
             </li>
             <li className=" dark:text-white">
-              <NavLink to='/upload-post'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
+              <NavLink to='/upload-post'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
                 <FontAwesomeIcon icon={faUpload} className="text-xl" />
                 <span>Upload Post</span>
               </NavLink>
             </li>
             <li className="dark:text-white">
-              <NavLink to='/user'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
+              <NavLink to='/user'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
                 <FontAwesomeIcon icon={faUser} className="text-xl" />
                 <span>User</span>
               </NavLink>
@@ -77,9 +95,11 @@ const Header = () => {
                 </span>
               </button>
             </li>
-            <ul className="pt-0 pl-16 hidden pb-2 space-y-1 text-[16px]" id="allSettingMenu">
-              <li className="pt-1">
-                <NavLink to="/edit-profile-photo" className="flex gap-2 items-center">
+
+            {/* More Setting List */}
+            <ul className="pt-0 overflow-hidden duration-200 ease-in-out h-0 pl-16 pb-2 space-y-1 text-[16px]" id="allSettingMenu">
+              <li className="pt-1 w-[224px]">
+                <NavLink to="/edit-profile-photo" className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-full py-2 pl-4 md:rounded-r-none" : "text-black dark:text-white" } text-black dark:text-white flex gap-2 items-center duration-200 ease-in-out rounded-xl`}>
                   <FontAwesomeIcon icon={faPenToSquare} className="text-[16px]" />
                   <span>
                     Edit Profile Photo
@@ -87,7 +107,7 @@ const Header = () => {
                 </NavLink>
               </li>
               <li className="pt-1">
-                <NavLink to="/edit-profile-detail" className="flex gap-2 items-center">
+                <NavLink to="/edit-profile-detail" className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-full py-2 pl-4 md:rounded-r-none " : "text-black dark:text-white" } text-black dark:text-white flex gap-2 items-center duration-200 ease-in-out rounded-xl`}>
                   <FontAwesomeIcon icon={faUserPen} className="font-[16px]" />
                   <span>
                     Edit Your Detail
@@ -103,6 +123,7 @@ const Header = () => {
                 </button>
               </li>
             </ul>
+
             <li>
               <button className="flex items-center w-[288px] p-2 space-x-3 rounded-md cursor-pointer">
                 <FontAwesomeIcon icon={faRightFromBracket} className="text-xl" />
