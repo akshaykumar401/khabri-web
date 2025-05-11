@@ -5,6 +5,8 @@ import DeleteAccountAlert from "./Alerts/DeleteAccountAlert.jsx";
 import LogoutAccountAlert from "./Alerts/LogoutAccountAlert.jsx";
 import CreatePost from "./CreatePost.jsx";
 import PostCard from "./PostCard.jsx";
+import DeletedSuccessfulAlert from "./Alerts/DeletedSuccessfulAlert.jsx";
+import LogoutSuccessfulAlert from "./Alerts/LogoutSuccessfulAlert.jsx";
 
 export {
   Header,
@@ -14,4 +16,6 @@ export {
   LogoutAccountAlert,
   CreatePost,
   PostCard,
+  DeletedSuccessfulAlert,
+  LogoutSuccessfulAlert,
 }

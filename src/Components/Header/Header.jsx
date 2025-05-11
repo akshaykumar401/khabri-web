@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faUpload, faUser, faGear, faCaretDown, faRightFromBracket, faTrashCan, faUserPen, faPenToSquare, faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
-import { Switch, DeleteAccountAlert, LogoutAccountAlert } from "../Components.js";
+import { Switch, DeleteAccountAlert, LogoutAccountAlert, DeletedSuccessfulAlert, LogoutSuccessfulAlert } from "../Components.js";
 
 const Header = () => {
   const [isSettingMenuOpen, setIsSettingMenuOpen] = useState(false);
   const [isListOpen, setIsListOpen] = useState(false);
   const [isShowDeleteAccountAlert, setIsShowDeleteAccountAlert] = useState(false);
   const [isShowLogoutAccountAlert, setIsShowLogoutAccountAlert] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
 
   // Hendling Display Setting Menu Cilck...
   const diplayAllSettingMenu = () => {
@@ -53,8 +55,10 @@ const Header = () => {
 
   return (
     <div className="w-full">
-      {isShowDeleteAccountAlert && <DeleteAccountAlert setIsShowDeleteAccountAlert={setIsShowDeleteAccountAlert}/>}
-      {isShowLogoutAccountAlert && <LogoutAccountAlert setIsShowLogoutAccountAlert={setIsShowLogoutAccountAlert} />}
+      {isShowDeleteAccountAlert && <DeleteAccountAlert setIsShowDeleteAccountAlert={setIsShowDeleteAccountAlert} setIsDeleted={setIsDeleted} />}
+      {isShowLogoutAccountAlert && <LogoutAccountAlert setIsShowLogoutAccountAlert={setIsShowLogoutAccountAlert} setIsLogout={setIsLogout} />}
+      {isDeleted  && <DeletedSuccessfulAlert setIsDeleted={setIsDeleted} /> }
+      {isLogout  && <LogoutSuccessfulAlert setIsLogout={setIsLogout} /> }
 
       {/* Nav Bar Code. */}
       <div className="bg-slate-300 fixed z-10 text-black dark:bg-slate-950 dark:text-white w-full h-12 font-semibold text-3xl flex items-center md:justify-center justify-between gap-4 px-16 font-['Tagesschrift'] drop-shadow-xl">

@@ -2,7 +2,7 @@ import React from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 
-const LogoutAccountAlert = ({ setIsShowLogoutAccountAlert }) => {
+const LogoutAccountAlert = ({ setIsShowLogoutAccountAlert, setIsLogout }) => {
   // Handle Cancel Button Event...
   const cancelHandle = () => {
     setIsShowLogoutAccountAlert(false);
@@ -11,7 +11,10 @@ const LogoutAccountAlert = ({ setIsShowLogoutAccountAlert }) => {
   // Handle Logout Button Event...
   const logout = () => {
     setIsShowLogoutAccountAlert(false);
-    alert("Logout Successfully.");
+    setIsLogout(true);
+    setTimeout( () => {
+      setIsLogout(false);
+    }, 3000);
   }
 
   return (

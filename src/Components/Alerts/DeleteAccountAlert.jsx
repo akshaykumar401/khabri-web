@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { DeletedSuccessfulAlert } from "../Components.js";
 
 
-const DeleteAccountAlert = ({ setIsShowDeleteAccountAlert }) => {
-  // Handle Cancel Button Event...
+const DeleteAccountAlert = ({ setIsShowDeleteAccountAlert, setIsDeleted }) => {  // Handle Cancel Button Event...
   const cancelHandle = () => {
     setIsShowDeleteAccountAlert(false);
   }
@@ -12,7 +12,10 @@ const DeleteAccountAlert = ({ setIsShowDeleteAccountAlert }) => {
   // Handle Delete Button Event...
   const deleteUser = () => {
     setIsShowDeleteAccountAlert(false);
-    alert("User Deleted Successfully.");
+    setIsDeleted(true);
+    setTimeout( () => {
+      setIsDeleted(false);
+    }, 3000);
   }
   return (
     <div className="w-[300px] h-[400px] p-4 absolute z-[999] bg-white rounded-md top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
