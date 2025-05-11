@@ -23,7 +23,7 @@ const Header = () => {
       setIsSettingMenuOpen(!isSettingMenuOpen);
     } else {
       settingArrow.style.transform = "rotate(180deg)";
-      allSettingMenu.style.height = "130px";
+      allSettingMenu.style.height = "150px";
       setIsSettingMenuOpen(!isSettingMenuOpen);
     }
   }
@@ -36,7 +36,7 @@ const Header = () => {
       list.style.height = "0px";
       setIsListOpen(!isListOpen);
     } else {
-      list.style.height = "460px";
+      list.style.height = "465px";
       setIsListOpen(!isListOpen);
     }
   }
