@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faUpload, faUser, faGear, faCaretDown, faRightFromBracket, faTrashCan, faUserPen, faPenToSquare, faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faUsers, faUpload, faUser, faGear, faCaretDown, faRightFromBracket, faTrashCan, faUserPen, faPenToSquare, faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
 import { Switch, DeleteAccountAlert, LogoutAccountAlert, DeletedSuccessfulAlert, LogoutSuccessfulAlert } from "../Components.js";
 
 const Header = () => {
@@ -36,7 +36,7 @@ const Header = () => {
       list.style.height = "0px";
       setIsListOpen(!isListOpen);
     } else {
-      list.style.height = "465px";
+      list.style.height = "520px";
       setIsListOpen(!isListOpen);
     }
   }
@@ -98,6 +98,12 @@ const Header = () => {
               <NavLink to='/upload-post'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
                 <FontAwesomeIcon icon={faUpload} className="text-xl" />
                 <span>Upload Post</span>
+              </NavLink>
+            </li>
+            <li className=" dark:text-white">
+              <NavLink to='/followed'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
+                <FontAwesomeIcon icon={faUsers} className="text-xl" />
+                <span>Followed</span>
               </NavLink>
             </li>
             <li className="dark:text-white">
