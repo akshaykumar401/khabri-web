@@ -7,6 +7,7 @@ import CreatePost from "./CreatePost.jsx";
 import PostCard from "./PostCard.jsx";
 import DeletedSuccessfulAlert from "./Alerts/DeletedSuccessfulAlert.jsx";
 import LogoutSuccessfulAlert from "./Alerts/LogoutSuccessfulAlert.jsx";
+import UsernameCard from "./UsernameCard.jsx";
 
 export {
   Header,
@@ -18,4 +19,5 @@ export {
   PostCard,
   DeletedSuccessfulAlert,
   LogoutSuccessfulAlert,
+  UsernameCard,
 }

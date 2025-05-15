@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useParams  } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import  { faHeart } from "@fortawesome/free-solid-svg-icons";
-import {CreatePost, PostCard} from "../Components/Components.js";
 
 const PostDisplay = () => {
   const { id } = useParams()

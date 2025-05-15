@@ -11,6 +11,7 @@ import EditProfileDetail from "./Pages/EditProfileDetail.jsx";
 import EditProfilePhoto from "./Pages/EditProfilePhoto.jsx";
 import Followed from "./Pages/Followed.jsx";
 import PostDisplay from "./Pages/PostDisplay.jsx";
+import OtherUserProfile from "./Pages/OtherUserProfile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/post-display/:id",
         element: <PostDisplay />,
+      },
+      {
+        path: "/profile/:username",
+        element: <OtherUserProfile />,
       },
     ]
   }
