@@ -18,7 +18,7 @@ const LogoutAccountAlert = ({ setIsShowLogoutAccountAlert, setIsLogout }) => {
   }
 
   return (
-    <div className="w-[300px] h-[350px] p-4 absolute z-[999] bg-white rounded-md top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+    <div className="w-[300px] h-[350px] p-4  z-[999] bg-white rounded-md top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] fixed  ">
       <div className="mx-auto w-16 h-16 mt-4 bg-red-200 rounded-full flex justify-center items-center">
         <FontAwesomeIcon icon={faTriangleExclamation} className="text-3xl text-red-500" />
       </div>

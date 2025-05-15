@@ -24,7 +24,7 @@ const PostCard = ({ id }) => {
         Post Title. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in urna eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, cursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.
       </h2>
 
-      <img src="https://imgs.search.brave.com/EH7EMedOpk39h_gW5vtD098G2nY5QaV15U7kn-nqJRo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGl4YWJheS5jb20v/cGhvdG8vMjAyNS8w/My8wOS8xMC8xNi9z/dW5yaXNlLTk0NTY4/NzFfNjQwLmpwZw" alt="reference image" className="w-full h-48 mt-2" />
+      <img src="https://imgs.search.brave.com/EH7EMedOpk39h_gW5vtD098G2nY5QaV15U7kn-nqJRo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGl4YWJheS5jb20v/cGhvdG8vMjAyNS8w/My8wOS8xMC8xNi9z/dW5yaXNlLTk0NTY4/NzFfNjQwLmpwZw" alt="reference image" className="w-full h-48 mt-2 rounded-lg" />
 
       <p className="w-full mt-2 text-ellipsis line-clamp-2">
         eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus

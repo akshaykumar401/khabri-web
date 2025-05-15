@@ -1,10 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const UploadPost = () => {
+  const [image, setImage] = useState(null);
+
+  const handleSubmit = () => {
+    const title = document.getElementById("title");
+    const description = document.getElementById("description");
+    const image = document.getElementById("imageInpute");
+
+    if(title.value === "" || description.value === "") {
+      alert("Please fill all the fields");
+    } else {
+      const formData = new FormData();
+      formData.append("title", title.value);
+      formData.append("description", description.value);
+      formData.append("image", image.files[0]);
+
+      console.log(title.value, description.value, image.files[0]);
+      console.log(formData);
+    }
+  }
+
   return (
-    <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">
-      <div className="w-xl bg-white text-black px-4 py-2">
-        Upload Post
+    <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10 mb-4">
+      <div className="w-xl h-auto dark:bg-slate-800 dark:text-white bg-gray-300 text-black px-4 py-2 rounded-lg mb-2">
+        <h2 className="w-full text-2xl pl-4 font-semibold font-['Comic Relief'] mb-8">UPLOAD POST</h2>
+        {/* Image Upload */}
+        <input type="file" className="hidden" id="imageInpute" onChange={(e) => setImage(e.target.files[0])} />
+        <label htmlFor="imageInpute" className="cursor-pointer w-[30%] p-4 bg-blue-600 rounded-lg" >Uplaod Image</label>
+
+        {/* Image Display */}
+        {image && (
+          <div className="w-[95%] h-auto flex justify-center items-center">
+            <img src={URL.createObjectURL(image)} alt="Uploaded Image" className="w-full h-full object-cover mt-6 rounded-lg" />
+          </div>)
+        }
+
+
+        {/* Title Text Area */}
+        <textarea className="w-full border-1 text-xl px-2 h-auto resize-none pt-2 mt-6 rounded-lg outline-none " maxLength="100" placeholder="Tille" id="title"></textarea>
+
+        {/* Description Text Area */}
+        <textarea className="w-full border-1 text-xl px-2 h-[60vh] resize-none pt-2 mt-2 rounded-lg outline-none " placeholder="Description" id="description"></textarea>
+
+        <button className="w-[50%] bg-green-300 justify-center flex items-center mx-auto py-2 text-black text-xl mt-2 cursor-pointer hover:bg-green-400 rounded-lg" onClick={handleSubmit}>Post</button>
       </div>
     </div>
   );

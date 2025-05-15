@@ -8,7 +8,7 @@ const LogoutSuccessfulAlert = ({ setIsLogout }) => {
   }
 
   return (
-    <div className="z-[9999] absolute top-2 left-[50%] translate-x-[-50%] bg-green-300 h-24 text-black  rounded-lg w-[300px] flex items-end justify-end">
+    <div className="z-[9999] fixed top-2 left-[50%] translate-x-[-50%] bg-green-300 h-24 text-black  rounded-lg w-[300px] flex items-end justify-end">
       <div className="flex gap-1 w-[95%] h-full bg-slate-700 text-white  rounded-lg">
         <div className="w-[85%]">
           <h2 className="text-2xl font-semibold pl-4 pt-2">Success.</h2>
