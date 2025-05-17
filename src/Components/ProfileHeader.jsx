@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ProfileHeader = ({ username, totalPost, totalFollower, totalFollowing }) => {
+const ProfileHeader = ({ username, totalPost, totalFollower, totalFollowing, isAdmin=false }) => {
   const [isFollowed, SetIsFollowed] = useState(true);
   const handleFollow = () => {
     SetIsFollowed(!isFollowed);
@@ -24,11 +24,11 @@ const ProfileHeader = ({ username, totalPost, totalFollower, totalFollowing }) =
           <li>
             <span className="font-semibold">Total Following:</span> {totalFollowing}
           </li>
-          <li>
+          { !isAdmin && <li>
             <button className={`${isFollowed ? "text-gray-300" : "text-white" } bg-blue-500 hover:bg-blue-700  py-2 px-4 rounded-xl cursor-pointer duration-300 ease-in-out mt-1 `} onClick={handleFollow}>
               {isFollowed ? "Followed" : "Follow"}
             </button>
-          </li>
+          </li>}
         </ul>
       </div>
     </div>

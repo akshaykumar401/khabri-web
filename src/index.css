@@ -5,4 +5,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=Comic+Relief:wght@400;700&display=swap');
 
 @import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
 @custom-variant dark (&:where(.dark, .dark *));
