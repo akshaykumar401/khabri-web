@@ -9,6 +9,9 @@ import DeletedSuccessfulAlert from "./Alerts/DeletedSuccessfulAlert.jsx";
 import LogoutSuccessfulAlert from "./Alerts/LogoutSuccessfulAlert.jsx";
 import UsernameCard from "./UsernameCard.jsx";
 import ProfileHeader from "./ProfileHeader.jsx";
+import UserPostCard from "./UserPostCard.jsx";
+import DeletePostAlert from "./Alerts/DeletePostAlert.jsx";
+import DeletePostSuccessFullAlert from "./Alerts/DeletePostSuccessFullAlert.jsx";
 
 export {
   Header,
@@ -22,4 +25,7 @@ export {
   LogoutSuccessfulAlert,
   UsernameCard,
   ProfileHeader,
+  UserPostCard,
+  DeletePostAlert,
+  DeletePostSuccessFullAlert,
 }
