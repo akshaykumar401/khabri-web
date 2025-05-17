@@ -12,6 +12,7 @@ import EditProfilePhoto from "./Pages/EditProfilePhoto.jsx";
 import Followed from "./Pages/Followed.jsx";
 import PostDisplay from "./Pages/PostDisplay.jsx";
 import OtherUserProfile from "./Pages/OtherUserProfile.jsx";
+import EditPost from "./Pages/EditPost.jsx";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
         path: "/profile/:username",
         element: <OtherUserProfile />,
       },
+      {
+        path: "/edit-post/:postId",
+        element: <EditPost />,
+      }
     ]
   }
 ]);

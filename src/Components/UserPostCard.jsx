@@ -14,6 +14,10 @@ const UserPostCard = ({ id }) => {
     navigate(`/post-display/${id}`);
   }
 
+  const handleEdit = () => {
+    navigate(`/edit-post/${id}`);
+  }
+
   const displayMenu = () => {
     const list = document.getElementById(uniqueId);
 
@@ -48,7 +52,7 @@ const UserPostCard = ({ id }) => {
       {/* Nested List For Admin Menu */}
       <ul className=" bg-white w-50 flex-col gap-2 justify-center items-center absolute left-[60%] translate-x-[-25%] hidden text-black p-2 rounded-md shadow-md" id={uniqueId}>
         <li>
-          <button className="hover:text-blue-600 duration-150 ease-in-out cursor-pointer" >
+          <button className="hover:text-blue-600 duration-150 ease-in-out cursor-pointer" onClick={handleEdit}>
             Edit Post
           </button>
         </li>
