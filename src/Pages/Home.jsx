@@ -7,8 +7,8 @@ const Home = () => {
       <div className="w-xl dark:bg-slate-800 dark:text-white bg-gray-300 text-black px-4 py-2 rounded-lg">
         <CreatePost />
 
-        <PostCard id={"12"} />
-        <PostCard id={"13"} />
+        <PostCard id={"12"} username={"aman"} />
+        <PostCard id={"13"} username={"jon"} />
       </div>
     </div>
   );
