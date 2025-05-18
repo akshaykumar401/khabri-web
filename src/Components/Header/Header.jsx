@@ -44,12 +44,18 @@ const Header = () => {
   // Delete Account Alert Button Event Handler...
   const deleteAccountAlert = () => {
     setIsShowLogoutAccountAlert(false);
+    if (window.innerWidth < 768) {
+      displayList();
+    }
     setIsShowDeleteAccountAlert(true);
   }
 
   // Logout Alert Button Event Handler...
   const logoutAlert = () => {
     setIsShowDeleteAccountAlert(false);
+    if (window.innerWidth < 768) {
+      displayList();
+    }
     setIsShowLogoutAccountAlert(true);
   }
 
@@ -89,25 +95,49 @@ const Header = () => {
         <div className="divide-y dark:divide-gray-300">
           <ul className="pt-2 pb-4 space-y-1 text-sm">
             <li className="dark:text-white">
-              <NavLink to='/' className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out justify-start`}>
-                <FontAwesomeIcon icon={faHouse} className="text-xl" />
+              <NavLink to='/' className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out justify-start`}
+               onClick={() => {
+                 if (window.innerWidth < 768) {
+                   displayList();
+                 }
+               }}
+              >
+                <FontAwesomeIcon icon={faHouse} className="text-xl"/>
                 <span>Home</span>
               </NavLink>
             </li>
             <li className=" dark:text-white">
-              <NavLink to='/upload-post'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
+              <NavLink to='/upload-post'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}
+                 onClick={() => {
+                   if (window.innerWidth < 768) {
+                     displayList();
+                   }
+                 }}
+              >
                 <FontAwesomeIcon icon={faUpload} className="text-xl" />
                 <span>Upload Post</span>
               </NavLink>
             </li>
             <li className=" dark:text-white">
-              <NavLink to='/followed'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
+              <NavLink to='/followed'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}
+                 onClick={() => {
+                   if (window.innerWidth < 768) {
+                     displayList();
+                   }
+                 }}
+              >
                 <FontAwesomeIcon icon={faUsers} className="text-xl" />
                 <span>Followed</span>
               </NavLink>
             </li>
             <li className="dark:text-white">
-              <NavLink to='/user'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}>
+              <NavLink to='/user'  className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-[288px] md:rounded-r-none" : "text-black dark:text-white" } flex items-center p-2 space-x-3 rounded-md duration-300 ease-in-out`}
+                 onClick={() => {
+                   if (window.innerWidth < 768) {
+                     displayList();
+                   }
+                 }}
+              >
                 <FontAwesomeIcon icon={faUser} className="text-xl" />
                 <span>User</span>
               </NavLink>
@@ -127,7 +157,13 @@ const Header = () => {
             {/* More Setting List */}
             <ul className="pt-0 overflow-hidden duration-200 ease-in-out h-0 pl-16 pb-2 space-y-1 text-[16px]" id="allSettingMenu">
               <li className="pt-1 w-[224px]">
-                <NavLink to="/edit-profile-photo" className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-full py-2 pl-4 md:rounded-r-none" : "text-black dark:text-white" } text-black dark:text-white flex gap-2 items-center duration-200 ease-in-out rounded-xl`}>
+                <NavLink to="/edit-profile-photo" className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-full py-2 pl-4 md:rounded-r-none" : "text-black dark:text-white" } text-black dark:text-white flex gap-2 items-center duration-200 ease-in-out rounded-xl`}
+                   onClick={() => {
+                     if (window.innerWidth < 768) {
+                       displayList();
+                     }
+                   }}
+                >
                   <FontAwesomeIcon icon={faPenToSquare} className="text-[16px]" />
                   <span>
                     Edit Profile Photo
@@ -135,7 +171,13 @@ const Header = () => {
                 </NavLink>
               </li>
               <li className="pt-1">
-                <NavLink to="/edit-profile-detail" className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-full py-2 pl-4 md:rounded-r-none " : "text-black dark:text-white" } text-black dark:text-white flex gap-2 items-center duration-200 ease-in-out rounded-xl`}>
+                <NavLink to="/edit-profile-detail" className={({ isActive }) => `${isActive ? "bg-blue-300 dark:bg-blue-950 text-white font-bold w-full py-2 pl-4 md:rounded-r-none " : "text-black dark:text-white" } text-black dark:text-white flex gap-2 items-center duration-200 ease-in-out rounded-xl`}
+                   onClick={() => {
+                     if (window.innerWidth < 768) {
+                       displayList();
+                     }
+                   }}
+                >
                   <FontAwesomeIcon icon={faUserPen} className="font-[16px]" />
                   <span>
                     Edit Your Detail
