@@ -6,12 +6,12 @@ const Footer = () => {
   return (
     <div className="px-6 py-4 md:w-[calc(100%-310px)] w-full sm:h-66 h-[24rem] bg-slate-300  md:ml-[305px] mt-1.5 z-10 drop-shadow-xl/25 dark:bg-slate-950 ">
       <div className="flex flex-col sm:flex-row w-full h-[80%] justify-center items-center sm:justify-between">
-        <div className="w-[25%] h-full flex gap-2 justify-center items-center">
-          <img src={ICON} className="h-10" />
+        <div className="sm:w-[25%] h-full flex gap-2 justify-center items-center">
+          <img src={`${ICON}`} alt="ICON" className="h-10" />
           <h2 className="font-['Tagesschrift'] font-bold text-[30px]">Khabri</h2>
         </div>
 
-        <div className="w-[25%] h-full flex justify-start items-start gap-4 flex-col text-left">
+        <div className="sm:w-[25%] h-full flex justify-start items-start gap-4 flex-col text-left">
           <h2 className="font-['Titillium-Web'] font-bold text-[20px]">Contect On:</h2>
           <ul className="flex flex-col gap-2 text-lg pl-5">
             <li className="hover:scale-110 duration-300 ease-in-out cursor-pointer font-['Titillium-Web'] hover:text-blue-500">

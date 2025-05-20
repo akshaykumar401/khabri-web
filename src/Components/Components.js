@@ -12,6 +12,8 @@ import ProfileHeader from "./ProfileHeader.jsx";
 import UserPostCard from "./UserPostCard.jsx";
 import DeletePostAlert from "./Alerts/DeletePostAlert.jsx";
 import DeletePostSuccessFullAlert from "./Alerts/DeletePostSuccessFullAlert.jsx";
+import ERROR from "./Alerts/ERROR.jsx";
+import SUSSEFULL from "./Alerts/SUSSEFULL.jsx";
 
 export {
   Header,
@@ -28,4 +30,6 @@ export {
   UserPostCard,
   DeletePostAlert,
   DeletePostSuccessFullAlert,
+  ERROR,
+  SUSSEFULL,
 }
