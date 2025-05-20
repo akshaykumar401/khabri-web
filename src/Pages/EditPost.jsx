@@ -1,8 +1,14 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import { useParams} from "react-router-dom";
+import {ERROR, SUCCESSFUL} from "../Components/Components.js";
 
 const EditPost = () => {
   const { postId } = useParams();
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
   const [image, setImage] = useState("https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
   const oldImage = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80";
   const [title, setTitle] = useState("non mauris quis, finibus impedssdfsfasfjsdsakfds sfas fsadfndsak ndsf sla bdsf nlskdnf lskdnf sldf d")
@@ -16,9 +22,37 @@ const EditPost = () => {
     "\n" +
     "eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.\n" +
     "\n" +
-    "eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.")
+    "eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc."
+  )
+
+  // Removing Error Alert in 3 Seconds
+  useEffect(() => {
+    if (isErrorOpen) {
+      const timer = setTimeout(() => {
+        setIsErrorOpen(false);
+        setErrorMessage("");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isErrorOpen]);
+
+  // Removing Success Alert in 3 Seconds
+  useEffect(() => {
+    if (isSuccessOpen) {
+      const timer = setTimeout(() => {
+        setIsSuccessOpen(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccessOpen]);
 
   const handleSubmit = () => {
+    if (title === "" || description === "") {
+      setIsErrorOpen(true);
+      setErrorMessage("Please fill all the fields");
+      return;
+    }
+
     const formData = new FormData();
     formData.append('image', image);
     formData.append('title', title);
@@ -26,10 +60,15 @@ const EditPost = () => {
 
     console.log(image, title, description);
     console.log(formData);
+
+    setIsSuccessOpen(true);
+    setSuccessMessage("Post Updated Successfully");
   }
 
   return (
     <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">
+      {isErrorOpen && <ERROR text={errorMessage} setIsErrorOpen={setIsErrorOpen}/>}
+      {isSuccessOpen && <SUCCESSFUL text={successMessage} setIsSuccessOpen={setIsSuccessOpen}/>}
       <div className="w-xl dark:bg-slate-800 dark:text-white bg-gray-300 text-black px-4 py-2 rounded-lg">
         <h2 className="w-full text-2xl pl-4 mt-2 font-semibold font-['Comic Relief'] mb-8">
           EDIT POST

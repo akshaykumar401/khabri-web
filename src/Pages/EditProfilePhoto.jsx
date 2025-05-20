@@ -1,7 +1,7 @@
 import React, { useState, useId, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import {ERROR, SUSSEFULL} from "../Components/Components.js";
+import {ERROR, SUCCESSFUL} from "../Components/Components.js";
 
 const EditProfilePhoto = () => {
   const [isNewImage, setIsNewImage] = useState(null);
@@ -53,7 +53,7 @@ const EditProfilePhoto = () => {
   return (
     <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">
       {isErrorOpen && <ERROR text={errorMessage} setIsErrorOpen={setIsErrorOpen}/>}
-      {isSuccessOpen && <SUSSEFULL text={successMessage} setIsSuccessOpen={setIsSuccessOpen}/>}
+      {isSuccessOpen && <SUCCESSFUL text={successMessage} setIsSuccessOpen={setIsSuccessOpen}/>}
       <div className="w-xl dark:bg-slate-800 dark:text-white bg-gray-300 text-black px-4 py-2 rounded-lg">
         <h2 className="text-2xl mt-2 mb-4 font-['Titillium+Web'] font-semibold pl-6">
           Edit Profile Photo

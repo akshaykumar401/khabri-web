@@ -13,7 +13,7 @@ import UserPostCard from "./UserPostCard.jsx";
 import DeletePostAlert from "./Alerts/DeletePostAlert.jsx";
 import DeletePostSuccessFullAlert from "./Alerts/DeletePostSuccessFullAlert.jsx";
 import ERROR from "./Alerts/ERROR.jsx";
-import SUSSEFULL from "./Alerts/SUSSEFULL.jsx";
+import SUCCESSFUL from "./Alerts/SUCCESSFUL.jsx";
 
 export {
   Header,
@@ -31,5 +31,5 @@ export {
   DeletePostAlert,
   DeletePostSuccessFullAlert,
   ERROR,
-  SUSSEFULL,
+  SUCCESSFUL,
 }
