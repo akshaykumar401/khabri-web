@@ -1,14 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useId } from 'react';
 import { useParams  } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import  { faHeart } from "@fortawesome/free-solid-svg-icons";
+import  { faHeart, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { Comments } from "../Components/Components.js";
 
 const PostDisplay = () => {
   const { id } = useParams()
+  const uniqueId = useId()
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  const sendComment = () => {
+    const commentInput = document.getElementById(uniqueId);
+    const comment = commentInput.value;
+    console.log(comment)
+    commentInput.value = "";
+  }
 
   return (
     <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">
@@ -73,7 +82,27 @@ const PostDisplay = () => {
           ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque
           eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.
         </p>
+
+
+        <div className="mt-6 bg-slate-500 p-2 rounded-lg">
+          <h2 className="text-lg font-semibold flex items-center gap-2 font-['Comic Relief']">
+            comments
+          </h2>
+          {/* Send Comment */}
+          <div className="flex items-center w-[95%] mx-auto mt-4">
+            <input className="border-1 p-2 rounded-l-lg border-r-0 w-[90%] outline-none" placeholder="Write a comment..." id={uniqueId}/>
+            <button className="bg-slate-600 p-2 w-[10%] hover:bg-slate-500 cursor-pointer duration-200 ease-in-out text-white border-1 border-l-0 rounded-r-lg" onClick={sendComment}>
+              <FontAwesomeIcon icon={faPaperPlane} className="text-xl"/>
+            </button>
+          </div>
+
+          <Comments username={"jon_doe"} comment={"Hii This is a comment"} />
+          <Comments username={"Aman"} comment={"Hello My Name is Aman"} />
+          <Comments username={"jon_doe"} comment={"Hello My Name is Jon"} />
+          <Comments username={"aditya"} comment={"Hello My Name is Aditya"} />
+        </div>
       </div>
+
     </div>
   );
 };

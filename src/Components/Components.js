@@ -14,6 +14,9 @@ import DeletePostAlert from "./Alerts/DeletePostAlert.jsx";
 import DeletePostSuccessFullAlert from "./Alerts/DeletePostSuccessFullAlert.jsx";
 import ERROR from "./Alerts/ERROR.jsx";
 import SUCCESSFUL from "./Alerts/SUCCESSFUL.jsx";
+import Loading1 from "./Loader/Loading1.jsx";
+import Loading2 from "./Loader/Loading2.jsx";
+import Comments from "./Comments.jsx";
 
 export {
   Header,
@@ -32,4 +35,7 @@ export {
   DeletePostSuccessFullAlert,
   ERROR,
   SUCCESSFUL,
+  Loading1,
+  Loading2,
+  Comments,
 }

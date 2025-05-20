@@ -1,12 +1,60 @@
-# React + Vite
+# Khabri Web Aplication
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Hii There This is Khabri Web Aplication. which is made by akshay kumar. This is made with React.
 
-Currently, two official plugins are available:
+This is a My Imagine Application where you can create your own posts and follow other users.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Create your own posts
+- Follow other users
+- Like other users posts
+- Comment on other users posts
+- View other users profile
+- View other users posts
+- View other users followers
+- View other users following
+- View other users liked posts
+- View other users comments
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Installation
+
+1. Clone the repository
+2. Run `npm install`
+3. Run `npm start`
+
+## Usage
+
+1. Run the application
+2. Create your own posts
+3. Follow other users
+4. Like other users posts
+5. Comment on other users posts
+6. View other users profile
+7. View other users posts
+8. View other users followers
+9. View other users following
+10. View other users liked posts
+11. View other users comments
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
+
+
+## Author
+
+<div style="display: flex; align-items: center; gap: 10px">
+    <img src="https://avatars.githubusercontent.com/u/145092546?v=4" alt="Akshay Kumar" width="50" height="50" style="border-radius: 100%"/>
+    <i style="color:purple; font-size:20px">Akshay Kumar</i>
+</div>
+<br />
+Thank You
+
+
+## Update
+
+Comming soon...
