@@ -17,6 +17,10 @@ import SUCCESSFUL from "./Alerts/SUCCESSFUL.jsx";
 import Loading1 from "./Loader/Loading1.jsx";
 import Loading2 from "./Loader/Loading2.jsx";
 import Comments from "./Comments.jsx";
+import Login from "./AuthForms/Login.jsx";
+import SignUp from "./AuthForms/SignUp.jsx";
+import ForgetPassword from "./AuthForms/ForgetPassword.jsx";
+import AuthenticateForm from "./AuthForms/AuthenticateForm.jsx";
 
 export {
   Header,
@@ -38,4 +42,8 @@ export {
   Loading1,
   Loading2,
   Comments,
+  Login,
+  SignUp,
+  ForgetPassword,
+  AuthenticateForm,
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useId } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { useParams  } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import  { faHeart, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
@@ -7,16 +7,44 @@ import { Comments } from "../Components/Components.js";
 const PostDisplay = () => {
   const { id } = useParams()
   const uniqueId = useId()
+  const containerId = useId()
 
+  const [likes, setLikes] = useState(123);
+  const [isLiked, setIsLiked] = useState(false);
+
+  // UseEffect to Scroll to Top
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  // Send Comment Methode....
   const sendComment = () => {
+    const parentContainer = document.getElementById(containerId);
     const commentInput = document.getElementById(uniqueId);
-    const comment = commentInput.value;
-    console.log(comment)
+
+    if(commentInput.value === "") {
+      return;
+    }
+    // Adding Comment...
+    const commentDiv = document.createElement("div");
+    commentDiv.className = "w-[95%] h-16 mt-4 mx-auto px-2 bg-gray-300 rounded-lg text-black";
+    commentDiv.innerHTML = `
+    <h2 class="text-gray-500 pl-2 pt-1">@you</h2>
+    <p class="pl-5 mt1">${commentInput.value}</p>
+    `;
+    parentContainer.prepend(commentDiv);
     commentInput.value = "";
+  }
+
+  // Increase and Decrease Likes Methode....
+  const increaseLikes = () => {
+    if (!isLiked) {
+      setLikes(likes + 1);
+      setIsLiked(true);
+    } else {
+      setLikes(likes - 1);
+      setIsLiked(false);
+    }
   }
 
   return (
@@ -28,9 +56,9 @@ const PostDisplay = () => {
             Username
           </h4>
 
-          <button className="w-9 h-9 rounded-full bg-red-500 flex justify-center items-center cursor-pointer">
+          <button className={`${isLiked ? "bg-red-500" : "bg-slate-300"} w-9 h-9 rounded-full flex justify-center items-center cursor-pointer border-1 border-slate-400 duration-400 ease-in-out`} onClick={increaseLikes}>
             <FontAwesomeIcon icon={faHeart} className="text-xl text-white" />
-            <span className="absolute text-lx font-semibold">0</span>
+            <span className="absolute text-lx font-semibold">{likes}</span>
           </button>
         </div>
 
@@ -96,10 +124,12 @@ const PostDisplay = () => {
             </button>
           </div>
 
-          <Comments username={"jon_doe"} comment={"Hii This is a comment"} />
-          <Comments username={"Aman"} comment={"Hello My Name is Aman"} />
-          <Comments username={"jon_doe"} comment={"Hello My Name is Jon"} />
-          <Comments username={"aditya"} comment={"Hello My Name is Aditya"} />
+          <div id={containerId}>
+            <Comments username={"jon_doe"} comment={"Hii This is a comment"} />
+            <Comments username={"Aman"} comment={"Hello My Name is Aman"} />
+            <Comments username={"jon_doe"} comment={"Hello My Name is Jon"} />
+            <Comments username={"aditya"} comment={"Hello My Name is Aditya"} />
+          </div>
         </div>
       </div>
 
