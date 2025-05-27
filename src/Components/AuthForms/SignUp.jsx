@@ -24,7 +24,7 @@ const SignUp = () => {
     const password = e.target.password.value;
     const name = e.target.name.value;
     const username = e.target.username.value;
-    const avator = profileImage;
+    const vator = profileImage;
     console.log(email, password, name, username, avator);
   }
 

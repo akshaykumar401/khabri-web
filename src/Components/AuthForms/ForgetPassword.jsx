@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAt, faEnvelope, faEye, faEyeSlash, faLock, faSignature} from "@fortawesome/free-solid-svg-icons";
+import {faAt, faEnvelope, faEye, faEyeSlash, faLock} from "@fortawesome/free-solid-svg-icons";
 import ForgetPass from "../../assets/ForgetPass.jpg";
 
 const ForgetPassword = () => {

@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import { useState } from 'react';
 import { Outlet } from "react-router-dom";
 import { Header, Footer, AuthenticateForm, Loading1, Loading2 } from "../src/Components/Components.js";
 
