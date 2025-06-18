@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ProfileHeader = ({ username, totalPost, totalFollower, totalFollowing, isAdmin=false }) => {
+const ProfileHeader = ({ username, totalPost, totalFollower, totalFollowing, avator, isAdmin=false }) => {
   const [isFollowed, SetIsFollowed] = useState(true);
   const handleFollow = () => {
     SetIsFollowed(!isFollowed);
@@ -9,7 +9,7 @@ const ProfileHeader = ({ username, totalPost, totalFollower, totalFollowing, isA
   return (
     <div className="w-[95%] bg-slate-400 flex  justify-between items-center text-black sm:px-10 py-2 mt-2 rounded-lg h-40 mx-auto">
       <div className="flex flex-col items-center sm:h-29 sm:w-32 w-28 h-28">
-        <img src="https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc" alt="User Image" className="sm:h-24 sm:w-24 h-20 w-20 rounded-full" />
+        <img src={avator ? avator: "https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc"} alt="User Image" className="sm:h-24 sm:w-24 h-20 w-20 rounded-full" />
         <span className="text-2xl mt-0.5">{username}</span>
       </div>
 

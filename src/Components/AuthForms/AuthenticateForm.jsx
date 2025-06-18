@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Login, SignUp, ForgetPassword } from "../Components.js";
 
-const AuthenticateForm = () => {
+const AuthenticateForm = ({ setIsLoggedIn }) => {
   const [activeState, setActiveState] = useState(0);
 
   const changeAuthState = () => {
@@ -19,8 +19,8 @@ const AuthenticateForm = () => {
         <button className={`${activeState === 1 ? 'bg-white' : 'bg-slate-500 text-white'}  cursor-pointer w-[50%] py-2 rounded-bl-2xl duration-600 ease-in-out border-none`} onClick={changeAuthState}>Sign Up</button>
       </div>
       <div className="w-full h-[calc(100%-60px)] bg-white">
-        {activeState === 0 && <Login setActiveState={setActiveState} />}
-        {activeState === 1 && <SignUp />}
+        {activeState === 0 && <Login setActiveState={setActiveState} setIsLoggedIn={setIsLoggedIn} />}
+        {activeState === 1 && <SignUp setIsLoggedIn={setIsLoggedIn} />}
         {activeState === 2 && <ForgetPassword />}
       </div>
     </div>
