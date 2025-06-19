@@ -87,6 +87,22 @@ export const deleteYourPost = createAsyncThunk('deleteYourPost', async (id, { re
   } else {
     return rejectWithValue(response.data.message);
   }
+});
+
+// View All Post Methode...
+export const viewAllPost = createAsyncThunk('viewAllPost', async (_, { rejectWithValue }) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+  const response = await axios.get(`/api/api/v1/posts/viewAllpost`, config);
+  if (response.status === 200) {
+    return response.data.data;
+  } else {
+    return rejectWithValue(response.data.message);
+  }
 })
 
 // Post Slice for User Post and all Post Display...
@@ -156,6 +172,19 @@ export const postSlice = createSlice({
         state.userPost = state.userPost.filter((post) => post._id !== action.payload);
       })
       .addCase(deleteYourPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to login";
+      })
+      // Handling The View All Post...
+      .addCase(viewAllPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(viewAllPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allPost = action.payload;
+      })
+      .addCase(viewAllPost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to login";
       })
