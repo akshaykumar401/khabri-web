@@ -3,6 +3,7 @@ import axios from "axios";
 
 const initialState = {
   userData: {},
+  otherUser: {},
   loading: false,
   error: null,
 };
@@ -18,6 +19,22 @@ export const loginUser = createAsyncThunk('loginUser', async (userData, { reject
     return rejectWithValue(response.data);
   }
 });
+
+// Getting Other User Data...
+export const getOtherUserData = createAsyncThunk('getOtherUserData', async (username, { rejectWithValue }) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+  const response = await axios.get(`/api/api/v1/uses/otherUserProfile/${username}`, config);
+  if (response.status === 200) {
+    return response.data.data;
+  } else {
+    return rejectWithValue(response.data.message);
+  }
+})
 
 // User Slice for managing user authentication state
 export const userSlice = createSlice({
@@ -48,6 +65,20 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to login";
       })
+      // Handling Get Other User Profile...
+      .addCase(getOtherUserData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getOtherUserData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.otherUser = action.payload;
+      })
+      .addCase(getOtherUserData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to login";
+      })
+
   }
 })
 

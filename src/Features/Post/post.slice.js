@@ -103,6 +103,23 @@ export const viewAllPost = createAsyncThunk('viewAllPost', async (_, { rejectWit
   } else {
     return rejectWithValue(response.data.message);
   }
+});
+
+// Create Post Methode...
+export const createUserPost = createAsyncThunk('createUserPost', async (data, { rejectWithValue }) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+  const response = await axios.post(`/api/api/v1/posts/createPost`, data, config);
+  console.log(response.data)
+  if (response.statusCode === 200) {
+    return response.data.data;
+  } else {
+    return rejectWithValue(response.data.message);
+  }
 })
 
 // Post Slice for User Post and all Post Display...
@@ -185,6 +202,20 @@ export const postSlice = createSlice({
         state.allPost = action.payload;
       })
       .addCase(viewAllPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to login";
+      })
+      // Handling The Create Post...
+      .addCase(createUserPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createUserPost.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log(action.payload)
+        state.allPost.push(action.payload)
+      })
+      .addCase(createUserPost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to login";
       })

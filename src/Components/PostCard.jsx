@@ -16,13 +16,15 @@ const PostCard = ({ id }) => {
     const post = allPost.filter((post) => post._id === id);
     setSinglePost(post);
     if (post.length > 0) {
-      post[0]?.user?.following?.map((ids) => {
+      post[0]?.user?.followers?.map((ids) => {
         if (ids === userData._id) {
           SetIsFollowed(true);
-        } else if (post[0]?.user?._id === userData._id) {
           SetDisplayFollowButton(false);
         }
       })
+      if (post[0]?.user?._id === userData?._id){
+        SetDisplayFollowButton(false);
+      }
     }
   }, [allPost]);
   
@@ -35,8 +37,7 @@ const PostCard = ({ id }) => {
   }
 
   const OpenProfile = () => {
-    const username = 'sa'
-    navigate(`/profile/${username}`);
+    navigate(`/profile/${singlePost[0]?.user?.username}`);
   }
 
   return (
@@ -57,7 +58,7 @@ const PostCard = ({ id }) => {
           {singlePost[0]?.title ? singlePost[0]?.title : ""}
         </h2>
 
-        <img src={singlePost[0]?.referanceImage && singlePost[0]?.referanceImage} />
+        <img src={singlePost[0]?.referanceImage && singlePost[0]?.referanceImage} className='h-56 w-full mt-2 rounded-lg' />
 
         <p className="w-full mt-2 text-ellipsis line-clamp-2">
           {singlePost[0]?.description ? singlePost[0]?.description : ""}

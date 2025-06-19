@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {ERROR, SUCCESSFUL} from "./Components.js";
+import { useDispatch } from 'react-redux';
+import { createUserPost } from '../Features/Post/post.slice.js';
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [imageLabelName, setImageLabelName] = useState("Upload Image");
+  const [image, setImage] = useState(null);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const dispatch = useDispatch();
 
   // Removing Error Alert in 3 Seconds
   useEffect(() => {
@@ -38,7 +42,7 @@ const CreatePost = () => {
   const HandleCreatePost = () => {
     const title = document.getElementById("title");
     const description = document.getElementById("description");
-    const image = document.getElementById("image");
+    // const image = document.getElementById("image");
 
     if(title.value === "" && description.value === "") {
       setIsErrorOpen(true);
@@ -48,14 +52,13 @@ const CreatePost = () => {
     const formData = new FormData();
     formData.append("title", title.value);
     formData.append("description", description.value);
-    formData.append("image", image.files[0]);
-
-    console.log(title.value, description.value, image.files[0]);
-    console.log(formData);
-
-    setIsSuccessOpen(true);
-    setSuccessMessage("Post Uploaded Successfully");
-
+    formData.append("image", image);
+    dispatch(createUserPost(formData)).then((action) => {
+      if (action.type === "createUserPost/fulfilled") {
+        setIsSuccessOpen(true);
+        setSuccessMessage("Post Uploaded Successfully");
+      }
+    })
   }
 
   return (
@@ -73,7 +76,7 @@ const CreatePost = () => {
       <textarea placeholder="post Description" className="w-full px-4 py-2 mt-2 rounded-lg border-1 dark:border-white border-slate-800 outline-none resize-none h-24" id="description"></textarea>
       <div className="flex items-center justify-between">
         <label htmlFor="image" className="border-1 border-slate-800 dark:border-white outline-none w-[60%] px-4 py-2 mt-2 rounded-lg cursor-pointer">{imageLabelName}</label>
-        <input type="file" typeof="image/*" placeholder={imageLabelName} className="hidden" id="image" onChange={(e) => setImageLabelName(e.target.files[0].name)}/>
+        <input type="file" typeof="image/*" placeholder={imageLabelName} className="hidden" id="image" onChange={(e) => [setImageLabelName(e.target.files[0].name), setImage(e.target.files[0]) ]}/>
 
         <button className="bg-blue-500 text-white py-2 h-10 px-4 w-[30%] rounded-lg cursor-pointer" onClick={HandleCreatePost}>
           Post

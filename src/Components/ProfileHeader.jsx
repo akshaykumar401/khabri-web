@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const ProfileHeader = ({ username, totalPost, totalFollower, totalFollowing, avator, isAdmin=false }) => {
-  const [isFollowed, SetIsFollowed] = useState(true);
+  const [isFollowed, SetIsFollowed] = useState(false);
+  const { userData, otherUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    setTimeout(() => {
+      userData?.following?.map((ids) => {
+      if (ids === otherUser._id) {
+        SetIsFollowed(true);
+      }
+    })
+    }, 1000);
+  }, [otherUser, userData])
+
   const handleFollow = () => {
     SetIsFollowed(!isFollowed);
   }
