@@ -7,7 +7,7 @@ const initialState = {
   error: null,
 };
 
-// Login user action
+// Login user action...
 export const loginUser = createAsyncThunk('loginUser', async (userData, { rejectWithValue }) => {
   const response = await axios.post(`/api/api/v1/uses/login`, userData);
   if (response.status === 200) {
@@ -17,7 +17,7 @@ export const loginUser = createAsyncThunk('loginUser', async (userData, { reject
   } else {
     return rejectWithValue(response.data);
   }
-})
+});
 
 // User Slice for managing user authentication state
 export const userSlice = createSlice({
@@ -25,13 +25,11 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     refereshToken: (state, action) => {
-      const { refreshToken } = action.payload || {};
-      state.userData = action.payload;
-      console.log("refreshToken:", refreshToken);
-
-      if (refreshToken) {
-        localStorage.setItem("refreshToken", refreshToken);
-        // localStorage.setItem("accessToken", action.payload.accessToken);
+      state.userData = action.payload.user;
+      
+      if ( action.payload.refreshToken && action.payload.accessToken ) {
+        localStorage.setItem("refreshToken", action.payload.refreshToken);
+        localStorage.setItem("accessToken", action.payload.accessToken);
       }
     },
   },

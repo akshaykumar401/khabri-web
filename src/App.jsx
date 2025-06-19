@@ -1,35 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { Header, Footer, AuthenticateForm, Loading1, Loading2 } from "../src/Components/Components.js";
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { refereshToken } from './Features/User/user.slice.js';
+import {
+  Header,
+  Footer,
+  AuthenticateForm,
+  Loading1,
+  Loading2,
+} from "../src/Components/Components.js";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { refereshToken } from "./Features/User/user.slice.js";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const fetchUserData = async () => {
+  const fetchUserData = async (REF) => {
     try {
-      const response = await axios.post(`/api/api/v1/uses/generateReferanceToken`, {
-        incomingRefreshToken: localStorage.getItem('refreshToken')
-      });
+      const config = {
+        headers: {
+          Authorization: `${REF}`,
+        },
+      };
+      const response = await axios.get(`/api/api/v1/uses/generateReferanceToken`, config);
 
       setIsLoading(false);
-
       if (response.data.statusCode === 200) {
         setIsLoggedIn(false);
-        dispatch(refereshToken(response.data.data.user));
+        dispatch(refereshToken(response.data.data));
       } else {
+        setIsLoading(false);
         setIsLoggedIn(true);
       }
     } catch (error) {
       setIsLoading(false);
       setIsLoggedIn(true);
-      console.error("ERROR: ", error.response.data.message || error.message);
+      console.error("ERROR: ", error.response?.data?.message || error.message);
     }
-  }
+  };
 
   // Checking User is Logged In or Not
   useEffect(() => {
@@ -42,7 +51,7 @@ function App() {
       setIsLoading(false);
       return;
     }
-    fetchUserData();
+    fetchUserData(REF);
   }, []);
 
   return (
@@ -50,14 +59,18 @@ function App() {
       {/* Login & and Sign Up Forms */}
       {isLoggedIn && <AuthenticateForm setIsLoggedIn={setIsLoggedIn} />}
       {isLoading && <Loading2 />}
-      <div className={`${isLoggedIn || isLoading ? "blur-sm -z-10" : ""} w-full h-auto block`}>
+      <div
+        className={`${
+          isLoggedIn || isLoading ? "blur-sm -z-10" : ""
+        } w-full h-auto block`}
+      >
         {/* Contents */}
         <Header />
         <Outlet />
         <Footer />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
