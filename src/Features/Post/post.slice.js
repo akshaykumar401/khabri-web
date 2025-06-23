@@ -114,8 +114,29 @@ export const createUserPost = createAsyncThunk('createUserPost', async (data, { 
     },
   };
   const response = await axios.post(`/api/api/v1/posts/createPost`, data, config);
-  console.log(response.data)
   if (response.statusCode === 200) {
+    return response.data.data;
+  } else {
+    return rejectWithValue(response.data.message);
+  }
+});
+
+// Edid Post Methode...
+export const editUserPost = createAsyncThunk('editUserPost', async (data, { rejectWithValue }) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+
+  const formData = new FormData();
+  formData.append('title', data.title);
+  formData.append('description', data.description);
+  formData.append('image', data.image);
+  const response = await axios.patch(`/api/api/v1/posts/editPost/${data.id}`, formData, config);
+
+  if (response.status === 200) {
     return response.data.data;
   } else {
     return rejectWithValue(response.data.message);
@@ -203,7 +224,7 @@ export const postSlice = createSlice({
       })
       .addCase(viewAllPost.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
+        state.error = action.payload;
       })
       // Handling The Create Post...
       .addCase(createUserPost.pending, (state) => {
@@ -212,10 +233,24 @@ export const postSlice = createSlice({
       })
       .addCase(createUserPost.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(action.payload)
         state.allPost.push(action.payload)
       })
       .addCase(createUserPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Handling The Edit Post...
+      .addCase(editUserPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editUserPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allPost = [state.userPost.filter((singlePost) => {
+          return singlePost._id !== action.payload._id
+        }), action.payload]
+      })
+      .addCase(editUserPost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to login";
       })

@@ -4,6 +4,7 @@ import axios from "axios";
 const initialState = {
   userData: {},
   otherUser: {},
+  followedUser: [],
   loading: false,
   error: null,
 };
@@ -33,6 +34,23 @@ export const getOtherUserData = createAsyncThunk('getOtherUserData', async (user
     return response.data.data;
   } else {
     return rejectWithValue(response.data.message);
+  }
+})
+
+// Get Follow User Profile Methode...
+export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', async ( _ , {rejectWithValue}) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+
+  const respone = await axios.get(`/api/api/v1/uses/following`, config);
+  if (respone.status === 200) {
+    return respone.data.data;
+  } else {
+    return rejectWithValue(respone.data.message);
   }
 })
 
@@ -78,7 +96,19 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to login";
       })
-
+      // Get All Followed User Profile Action...
+      .addCase(getFollowUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getFollowUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.followedUser = action.payload;
+      })
+      .addCase(getFollowUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to login";
+      })
   }
 })
 

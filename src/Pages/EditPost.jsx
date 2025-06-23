@@ -1,29 +1,35 @@
 import React, { useState, useEffect} from 'react';
 import { useParams} from "react-router-dom";
 import {ERROR, SUCCESSFUL} from "../Components/Components.js";
+import { useSelector, useDispatch } from 'react-redux';
+import { editUserPost } from '../Features/Post/post.slice.js';
+import { useNavigate } from 'react-router-dom'; 
 
 const EditPost = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { postId } = useParams();
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const { userPost } = useSelector((state) => state.post);
 
-  const [image, setImage] = useState("https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
-  const oldImage = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80";
-  const [title, setTitle] = useState("non mauris quis, finibus impedssdfsfasfjsdsakfds sfas fsadfndsak ndsf sla bdsf nlskdnf lskdnf sldf d")
-  const [description, setDescription] = useState("eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.\n" +
-    "\n" +
-    "eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.\n" +
-    "\n" +
-    "eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.\n" +
-    "\n" +
-    "eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.\n" +
-    "\n" +
-    "eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc.\n" +
-    "\n" +
-    "eget velit pharetra iaculis. Integer rhoncus lobortis vulputate. Fusce ac dapibus magna. Cras finibus orci sit amet euismod hendrerit. Duis dolor mauris, maximus non mauris quis, finibus imperdiet ipsum. Nullam neque nunc, posuere rutrum arcu in, ursus ullamcorper dui. Nullam ut venenatis neque, sit amet accumsan lectus. Quisque eget tortor non justo semper egestas. Duis pellentesque orci eu nunc."
-  )
+  const [image, setImage] = useState("");
+  const [oldImage, setOldImage] = useState("");
+  // let oldImage = "";
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+
+  useEffect(() => {
+    const post = userPost.find((post) => post._id === postId);
+    if (post) {
+      setTitle(post?.title);
+      setDescription(post?.description);
+      setOldImage(post?.referanceImage);
+      setImage(post?.referanceImage);
+    }
+  }, [userPost])
 
   // Removing Error Alert in 3 Seconds
   useEffect(() => {
@@ -41,6 +47,7 @@ const EditPost = () => {
     if (isSuccessOpen) {
       const timer = setTimeout(() => {
         setIsSuccessOpen(false);
+
       }, 3000);
       return () => clearTimeout(timer);
     }
@@ -53,16 +60,21 @@ const EditPost = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('image', image);
-    formData.append('title', title);
-    formData.append('description', description);
+    const data = {
+      id: postId,
+      title: title,
+      description: description,
+      image: image,
+    }
 
-    console.log(image, title, description);
-    console.log(formData);
+    dispatch(editUserPost(data)).then((action) => {
+      if (action.type === "editUserPost/fulfilled"){
+        setIsSuccessOpen(true);
+        setSuccessMessage("Post Updated Successfully");
+        navigate("/user");
+      }
+    })
 
-    setIsSuccessOpen(true);
-    setSuccessMessage("Post Updated Successfully");
   }
 
   return (

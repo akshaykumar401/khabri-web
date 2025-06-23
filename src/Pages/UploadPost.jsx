@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { ERROR, SUCCESSFUL } from "../Components/Components.js";
+import { useDispatch } from 'react-redux';
+import { createUserPost } from '../Features/Post/post.slice.js';
 
 const UploadPost = () => {
+  const dispatch = useDispatch();
   const [image, setImage] = useState(null);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  
 
   // Removing Error Alert in 3 Seconds
   useEffect(() => {
@@ -44,11 +48,16 @@ const UploadPost = () => {
     formData.append("description", description.value);
     formData.append("image", image.files[0]);
 
-    console.log(title.value, description.value, image.files[0]);
-    console.log(formData);
+    dispatch(createUserPost(formData)).then((action) => {
+      if (action.type === "createUserPost/fulfilled") {
+        setImage(null)
+        title.value = "";
+        description.value = "";
+        setIsSuccessOpen(true);
+        setSuccessMessage("Post Uploaded Successfully");
+      }
+    })
 
-    setIsSuccessOpen(true);
-    setSuccessMessage("Post Uploaded Successfully");
   }
 
   return (
