@@ -2,8 +2,11 @@ import React, { useState, useId, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import {ERROR, SUCCESSFUL} from "../Components/Components.js";
+import { useSelector, useDispatch } from 'react-redux';
+import { editUserProfilePhoto } from '../Features/User/user.slice.js';
 
 const EditProfilePhoto = () => {
+  const dispatch = useDispatch();
   const [isNewImage, setIsNewImage] = useState(null);
   const uniqueId = useId();
   const uniqueId2 = useId();
@@ -12,6 +15,15 @@ const EditProfilePhoto = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [oldImage, setOldImage] = useState("");
+
+  const { userData } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (userData) {
+      setOldImage(userData.avator);
+    }
+  }, [userData])
 
   // Removing Error Alert in 3 Seconds
   useEffect(() => {
@@ -37,8 +49,15 @@ const EditProfilePhoto = () => {
   // Button Event Handler For Profile Change
   const handleProfileChange = () => {
     if (isNewImage) {
-      setIsSuccessOpen(true);
-      setSuccessMessage("Profile Photo Changed Successfully");
+      const formData = new FormData();
+      formData.append("avator", isNewImage);
+      dispatch(editUserProfilePhoto(formData)).then((action) => {
+        if (action.type === 'editUserProfilePhoto/fulfilled') {
+          setIsSuccessOpen(true);
+          setSuccessMessage("Profile Photo Changed Successfully");
+          setIsNewImage(null);
+        }
+      })
     } else {
       setIsErrorOpen(true);
       setErrorMessage("Pick an image");
@@ -61,7 +80,7 @@ const EditProfilePhoto = () => {
 
         <div className="w-full flex flex-col gap-2 justify-center items-center">
           <div className="flex px-4 gap-4 items-center justify-around  bg-slate-200 dark:bg-gray-600 rounded-xl w-[95%] mx-auto h-56">
-            <img src="https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc" alt="Old Image" className="h-23 w-23 sm:w-40 sm:h-40 rounded-full border-1" />
+            <img src={oldImage !== "default.jpeg" ? oldImage : "https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc"} alt="Old Image" className="h-23 w-23 sm:w-40 sm:h-40 rounded-full border-1" />
             <FontAwesomeIcon icon={faArrowRight} className="text-4xl" />
             <input type="file" className="hidden" id={uniqueId2} onChange={(e) => setIsNewImage(e.target.files[0])}/>
             <img src={isNewImage ? URL.createObjectURL(isNewImage) : "null"} alt="New Image" className="h-23 cursor-pointer w-23 sm:w-40 sm:h-40 rounded-full border-1" id={uniqueId} onClick={UploadNewProfile} />

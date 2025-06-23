@@ -38,7 +38,7 @@ export const getOtherUserData = createAsyncThunk('getOtherUserData', async (user
 })
 
 // Get Follow User Profile Methode...
-export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', async ( _ , {rejectWithValue}) => {
+export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', async (_, { rejectWithValue }) => {
   const refreshToken = localStorage.getItem("refreshToken");
   const config = {
     headers: {
@@ -54,6 +54,99 @@ export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', asy
   }
 })
 
+// Edit Profile Photo Methode...
+export const editUserProfilePhoto = createAsyncThunk('editUserProfilePhoto', async (image, { rejectWithValue }) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+
+  const response = await axios.patch(`/api/api/v1/uses/updateAvator`, image, config);
+  if (response.status === 200) {
+    return response.data.data;
+  } else {
+    return rejectWithValue(response.data.message);
+  }
+})
+
+// Edit Profile Detail Methode...
+export const editUserProfileDetail = createAsyncThunk('editUserProfileDetail', async (data, { rejectWithValue }) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+
+  const respone = await axios.patch(`/api/api/v1/uses/updateProfile`, data, config);
+
+  if (respone.status === 200) {
+    return respone.data.data;
+  } else {
+    return rejectWithValue(respone.data.message);
+  }
+})
+
+// Logout User Methode...
+export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithValue }) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+
+  const response = await axios.post(`/api/api/v1/uses/logout`, config);
+
+  if (response.status === 200) {
+    return response.data.data;
+  } else {
+    return rejectWithValue(response.data.message);
+  }
+})
+
+// SignUp User Methode...
+export const signUpUser = createAsyncThunk('signUpUser', async (data, { rejectWithValue }) => {
+  const response = await axios.post(`/api/api/v1/uses/sigin`, data);
+
+  if (response.status === 200) {
+    return response.data.data;
+  } else {
+    return rejectWithValue(response.data.message);
+  }
+})
+
+// Delete Account Methode...
+export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_, { rejectWithValue }) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+
+  const respone = await axios.delete(`/api/api/v1/uses/deleteProfile`, config);
+
+  if (respone.status === 200) {
+    return respone.data.data;
+  } else {
+    return rejectWithValue(respone.data.message);
+  }
+})
+
+// Forget Password Methode...
+export const changePassword = createAsyncThunk('changePassword', async (data, { rejectWithValue }) => {
+  const response = await axios.post(`/api/api/v1/uses/forgotPassword`, data)
+
+  if (response.status === 200) {
+    return response.data.data;
+  } else {
+    return rejectWithValue(response.data.message);
+  }
+})
+
 // User Slice for managing user authentication state
 export const userSlice = createSlice({
   name: "user",
@@ -61,8 +154,8 @@ export const userSlice = createSlice({
   reducers: {
     refereshToken: (state, action) => {
       state.userData = action.payload.user;
-      
-      if ( action.payload.refreshToken && action.payload.accessToken ) {
+
+      if (action.payload.refreshToken && action.payload.accessToken) {
         localStorage.setItem("refreshToken", action.payload.refreshToken);
         localStorage.setItem("accessToken", action.payload.accessToken);
       }
@@ -108,6 +201,84 @@ export const userSlice = createSlice({
       .addCase(getFollowUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to login";
+      })
+      // Update User Profile Action...
+      .addCase(editUserProfilePhoto.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editUserProfilePhoto.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(editUserProfilePhoto.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to UpDate Profile Photo.";
+      })
+      // Update User Profile Detail Action...
+      .addCase(editUserProfileDetail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editUserProfileDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(editUserProfileDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to UpDate Profile Detail.";
+      })
+      // Logout User Action...
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Fail To Logout User.";
+      })
+      // SignUp User Action...
+      .addCase(signUpUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signUpUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(signUpUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Fail To Logout User.";
+      })
+      // Delete User Action...
+      .addCase(deleteUserAccount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUserAccount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(deleteUserAccount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Fail To Delete Account User.";
+      })
+      // Forget Password Action...
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Fail To Change Password.";
       })
   }
 })

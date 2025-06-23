@@ -4,6 +4,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const DeletedSuccessfulAlert = ({ setIsDeleted }) => {
   const disappearAlert = () => {
+    window.location.reload();
     setIsDeleted(false);
   }
 

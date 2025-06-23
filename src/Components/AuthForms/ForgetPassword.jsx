@@ -2,19 +2,57 @@ import React, {useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAt, faEnvelope, faEye, faEyeSlash, faLock} from "@fortawesome/free-solid-svg-icons";
 import ForgetPass from "../../assets/ForgetPass.jpg";
+import { ERROR, SUCCESSFUL } from '../Components.js';
+import { useDispatch } from 'react-redux';
+import { changePassword } from '../../Features/User/user.slice.js';
 
 const ForgetPassword = () => {
+  const dispatch = useDispatch();
+
   const [passwordState, setPasswordState] = useState("password");
   const [conformPasswordState, setConformPasswordState] = useState("password");
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleForgetPassword = (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const username = e.target.username.value;
-    const conformPassword = e.target.conformPassword.value;
-    const password = e.target.password.value;
 
-    console.log(email, username, conformPassword, password);
+    if (!e.target.email.value || !e.target.username.value || !e.target.conformPassword.value || !e.target.password.value ) {
+      setError("Please fill all the fields");
+      setIsErrorOpen(true);
+      setTimeout(() => {
+        setIsErrorOpen(false)
+      }, 3000);
+      return;
+    }
+
+    if (e.target.conformPassword.value !== e.target.password.value) {
+      setError("Conform password does not match");
+      setIsErrorOpen(true);
+      setTimeout(() => {
+        setIsErrorOpen(false)
+      }, 3000);
+      return;
+    }
+
+    const data = {
+      email: e.target.email.value,
+      username: e.target.username.value,
+      newPassword: e.target.password.value
+    }
+
+    dispatch(changePassword(data)).then((action) => {
+      if (action.type === 'changePassword/fulfilled') {
+        setSuccess("Password changed successfully, please login");
+        setIsSuccessOpen(true);
+        setTimeout(() => {
+          setIsSuccessOpen(false)
+        }, 3000);
+        e.target.reset();
+      }
+    });
   }
 
   // Display conform password Methode...
@@ -37,24 +75,26 @@ const ForgetPassword = () => {
 
   return (
     <div className="bg-white sm:pb-0 pb-5 rounded-lg text-black flex-col-reverse items-center sm:flex-row sm:items-start flex justify-around w-full sm:h-full">
+      {isErrorOpen && <ERROR text={error} setIsErrorOpen={setIsErrorOpen} />}
+      {isSuccessOpen && <SUCCESSFUL text={success} setIsSuccessOpen={setIsSuccessOpen} />}
       <div className="sm:w-[45%] w-[95%] py-4 pb-8 h-[90%] mt-2 sm:mt-4 p-2 border-1 rounded-lg">
         <form className="flex flex-col gap-2" onSubmit={handleForgetPassword}>
           <div className="border-1 p-2 rounded-lg mt-4">
             <FontAwesomeIcon icon={faEnvelope} className="text-xl mr-2 font-light" />
-            <input type="email" placeholder="Email" className="w-[80%] outline-none" required name="email"/>
+            <input type="email" placeholder="Email" className="w-[80%] outline-none" name="email"/>
           </div>
           <div className="border-1 p-2 rounded-lg mt-4">
             <FontAwesomeIcon icon={faAt} className="text-xl mr-2 font-light" />
-            <input type="text" placeholder="Username" className="w-[80%] outline-none" required name="username"/>
+            <input type="text" placeholder="Username" className="w-[80%] outline-none" name="username"/>
           </div>
           <div className="border-1 p-2 rounded-lg mt-4 flex w-full">
             <FontAwesomeIcon icon={faLock} className="text-xl mr-2 font-light" />
-            <input type={passwordState} placeholder="New Password" className="outline-none w-[80%]" required name="password"/>
+            <input type={passwordState} placeholder="New Password" className="outline-none w-[80%]" name="password"/>
             {passwordState === "password" ? <FontAwesomeIcon icon={faEye} className="text-xl mr-2 font-light cursor-pointer" onClick={displayPassword}/> : <FontAwesomeIcon icon={faEyeSlash} className="text-xl mr-2 font-light cursor-pointer" onClick={displayPassword}/>}
           </div>
           <div className="border-1 p-2 rounded-lg mt-4 flex w-full">
             <FontAwesomeIcon icon={faLock} className="text-xl mr-2 font-light" />
-            <input type={conformPasswordState} placeholder="Conform Password" className="outline-none w-[80%]" required name="conformPassword"/>
+            <input type={conformPasswordState} placeholder="Conform Password" className="outline-none w-[80%]" name="conformPassword"/>
             {conformPasswordState === "password" ? <FontAwesomeIcon icon={faEye} className="text-xl mr-2 font-light cursor-pointer" onClick={displayConformPassword}/> : <FontAwesomeIcon icon={faEyeSlash} className="text-xl mr-2 font-light cursor-pointer" onClick={displayConformPassword}/>}
           </div>
           <button type="submit" className="bg-slate-500 text-white py-2 rounded-lg cursor-pointer mt-3 active:scale-95 duration-200 ease-in-out hover:bg-slate-600">Reset</button>

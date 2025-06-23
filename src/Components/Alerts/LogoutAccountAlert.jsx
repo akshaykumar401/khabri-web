@@ -1,8 +1,12 @@
 import React from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
+import { logoutUser } from '../../Features/User/user.slice.js';
+import { useDispatch } from 'react-redux';
 
 const LogoutAccountAlert = ({ setIsShowLogoutAccountAlert, setIsLogout }) => {
+  const dispatch = useDispatch();
+
   // Handle Cancel Button Event...
   const cancelHandle = () => {
     setIsShowLogoutAccountAlert(false);
@@ -11,10 +15,17 @@ const LogoutAccountAlert = ({ setIsShowLogoutAccountAlert, setIsLogout }) => {
   // Handle Logout Button Event...
   const logout = () => {
     setIsShowLogoutAccountAlert(false);
-    setIsLogout(true);
-    setTimeout( () => {
-      setIsLogout(false);
-    }, 3000);
+
+    dispatch(logoutUser()).then((action) => {
+      if (action.type === 'logoutUser/fulfilled') {
+        setIsLogout(true);
+        setTimeout( () => {
+          setIsLogout(false);
+          window.location.reload();
+        }, 3000);
+      }
+    })
+
   }
 
   return (

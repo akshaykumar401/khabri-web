@@ -16,7 +16,7 @@ const PostDisplay = () => {
 
   // All Use State For Post Display...
   const [postData, setPostData] = useState({});
-  const [likes, setLikes] = useState(123);
+  const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
   // Get Single Post From Store...
@@ -25,7 +25,7 @@ const PostDisplay = () => {
   // UseEffect to Set Post Data
   useEffect(() => {
     setPostData(viewSinglePost);
-    setLikes(postData?.likes?.length);
+    setLikes(postData?.likes?.length || 0);
     postData?.likes?.map((like) => {
       if (like === postData?.user?._id) {
         setIsLiked(true);

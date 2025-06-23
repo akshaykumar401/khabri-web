@@ -1,9 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-
+import { useDispatch } from 'react-redux';
+import { deleteUserAccount } from '../../Features/User/user.slice.js';
 
 const DeleteAccountAlert = ({ setIsShowDeleteAccountAlert, setIsDeleted }) => {  // Handle Cancel Button Event...
+  const dispatch = useDispatch();
+
   const cancelHandle = () => {
     setIsShowDeleteAccountAlert(false);
   }
@@ -11,10 +14,17 @@ const DeleteAccountAlert = ({ setIsShowDeleteAccountAlert, setIsDeleted }) => { 
   // Handle Delete Button Event...
   const deleteUser = () => {
     setIsShowDeleteAccountAlert(false);
-    setIsDeleted(true);
-    setTimeout( () => {
-      setIsDeleted(false);
-    }, 3000);
+
+    dispatch(deleteUserAccount()).then((action) => {
+      if (action.type === 'deleteUserAccount/fulfilled') {
+        setIsDeleted(true);
+        setTimeout( () => {
+          setIsDeleted(false);
+          window.location.reload();
+        }, 3000);
+      }
+    })
+
   }
   return (
     <div className="w-[300px] h-[400px] p-4 fixed z-[999] bg-white rounded-md top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">

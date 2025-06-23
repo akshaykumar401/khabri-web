@@ -1,15 +1,27 @@
 import React, { useId, useState, useEffect } from 'react';
 import { ERROR, SUCCESSFUL } from "../Components/Components.js";
+import { editUserProfileDetail } from '../Features/User/user.slice.js';
+import { useSelector, useDispatch } from 'react-redux';
 
 const EditProfileDetail = () => {
   const uniqueId = useId();
   const uniqueId2 = useId();
-  const [name, setName] = useState("Jon Doe");
-  const [username, setUsername] = useState("jon_doe");
+  const dispatch = useDispatch();
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+
+  const { userData } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (userData) {
+      setName(userData?.fullName);
+      setUsername(userData?.username);
+    }
+  }, [userData]);
 
   // Removing Error Alert in 3 Seconds
   useEffect(() => {
@@ -39,14 +51,17 @@ const EditProfileDetail = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("username", username);
+    const formData = {
+      fullName: name,
+      username: username,
+    }
 
-    console.log(name, username);
-    console.log(formData);
-    setSuccessMessage("Profile Updated Successfully");
-    setIsSuccessOpen(true);
+    dispatch(editUserProfileDetail(formData)).then((action) => {
+      if (action.type === 'editUserProfileDetail/fulfilled') {
+        setSuccessMessage("Profile Updated Successfully");
+        setIsSuccessOpen(true);
+      }
+    })
   }
 
   return (

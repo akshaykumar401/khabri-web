@@ -5,6 +5,7 @@ import {faXmark} from "@fortawesome/free-solid-svg-icons";
 const LogoutSuccessfulAlert = ({ setIsLogout }) => {
   const disappearAlert = () => {
     setIsLogout(false);
+    window.location.reload();
   }
 
   return (
