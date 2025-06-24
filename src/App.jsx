@@ -24,7 +24,7 @@ function App() {
           Authorization: `${REF}`,
         },
       };
-      const response = await axios.get(`${conf.USER_BASE_URL}/generateReferanceToken`, config);
+      const response = await axios.get(`${conf.BASE_URL}/api/v1/uses/generateReferanceToken`, config);
 
       setIsLoading(false);
       if (response.data.statusCode === 200) {
