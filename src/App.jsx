@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { refereshToken } from "./Features/User/user.slice.js";
+import conf from './Config/config.js';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +24,7 @@ function App() {
           Authorization: `${REF}`,
         },
       };
-      const response = await axios.get(`/api/api/v1/uses/generateReferanceToken`, config);
+      const response = await axios.get(`${conf.USER_BASE_URL}/generateReferanceToken`, config);
 
       setIsLoading(false);
       if (response.data.statusCode === 200) {

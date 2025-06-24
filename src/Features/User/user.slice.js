@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import conf from '../../Config/config.js';
 
 const initialState = {
   userData: {},
@@ -11,7 +12,7 @@ const initialState = {
 
 // Login user action...
 export const loginUser = createAsyncThunk('loginUser', async (userData, { rejectWithValue }) => {
-  const response = await axios.post(`/api/api/v1/uses/login`, userData);
+  const response = await axios.post(`${conf.USER_BASE_URL}/login`, userData);
   if (response.status === 200) {
     localStorage.setItem("accessToken", response.data.data.accessToken);
     localStorage.setItem("refreshToken", response.data.data.refreshToken);
@@ -29,7 +30,7 @@ export const getOtherUserData = createAsyncThunk('getOtherUserData', async (user
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.get(`/api/api/v1/uses/otherUserProfile/${username}`, config);
+  const response = await axios.get(`${conf.USER_BASE_URL}/otherUserProfile/${username}`, config);
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -46,7 +47,7 @@ export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', asy
     },
   };
 
-  const respone = await axios.get(`/api/api/v1/uses/following`, config);
+  const respone = await axios.get(`${conf.USER_BASE_URL}/following`, config);
   if (respone.status === 200) {
     return respone.data.data;
   } else {
@@ -63,7 +64,7 @@ export const editUserProfilePhoto = createAsyncThunk('editUserProfilePhoto', asy
     },
   };
 
-  const response = await axios.patch(`/api/api/v1/uses/updateAvator`, image, config);
+  const response = await axios.patch(`${conf.USER_BASE_URL}/updateAvator`, image, config);
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -80,7 +81,7 @@ export const editUserProfileDetail = createAsyncThunk('editUserProfileDetail', a
     },
   };
 
-  const respone = await axios.patch(`/api/api/v1/uses/updateProfile`, data, config);
+  const respone = await axios.patch(`${conf.USER_BASE_URL}/updateProfile`, data, config);
 
   if (respone.status === 200) {
     return respone.data.data;
@@ -98,7 +99,7 @@ export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithV
     },
   };
 
-  const response = await axios.post(`/api/api/v1/uses/logout`, config);
+  const response = await axios.post(`${conf.USER_BASE_URL}/logout`, config);
 
   if (response.status === 200) {
     return response.data.data;
@@ -109,7 +110,7 @@ export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithV
 
 // SignUp User Methode...
 export const signUpUser = createAsyncThunk('signUpUser', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/api/api/v1/uses/sigin`, data);
+  const response = await axios.post(`${conf.USER_BASE_URL}/sigin`, data);
 
   if (response.status === 200) {
     return response.data.data;
@@ -127,7 +128,7 @@ export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_,
     },
   };
 
-  const respone = await axios.delete(`/api/api/v1/uses/deleteProfile`, config);
+  const respone = await axios.delete(`${conf.USER_BASE_URL}/deleteProfile`, config);
 
   if (respone.status === 200) {
     return respone.data.data;
@@ -138,7 +139,7 @@ export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_,
 
 // Forget Password Methode...
 export const changePassword = createAsyncThunk('changePassword', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/api/api/v1/uses/forgotPassword`, data)
+  const response = await axios.post(`${conf.USER_BASE_URL}/forgotPassword`, data)
 
   if (response.status === 200) {
     return response.data.data;

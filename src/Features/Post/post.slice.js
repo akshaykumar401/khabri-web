@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import conf from '../../Config/config.js';
 
 const initialState = {
   userPost: [],
@@ -17,7 +18,7 @@ export const allUserPost = createAsyncThunk('allUserPost', async (_, { rejectWit
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.get(`/api/api/v1/posts/viewUserPost`, config);
+  const response = await axios.get(`${conf.POST_BASE_URL}/viewUserPost`, config);
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -33,7 +34,7 @@ export const viewPost = createAsyncThunk('viewPost', async (id, { rejectWithValu
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.get(`/api/api/v1/posts/viewPost/${id}`, config);
+  const response = await axios.get(`${conf.POST_BASE_URL}/viewPost/${id}`, config);
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -49,7 +50,7 @@ export const likePost = createAsyncThunk('likePost', async (id, { rejectWithValu
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.patch(`/api/api/v1/posts/likePost/${id}`, config);
+  const response = await axios.patch(`${conf.POST_BASE_URL}/likePost/${id}`, config);
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -65,7 +66,7 @@ export const dislikePost = createAsyncThunk('dislikePost', async (id, { rejectWi
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.patch(`/api/api/v1/posts/dislikePost/${id}`, config);
+  const response = await axios.patch(`${conf.POST_BASE_URL}/dislikePost/${id}`, config);
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -81,7 +82,7 @@ export const deleteYourPost = createAsyncThunk('deleteYourPost', async (id, { re
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.get(`/api/api/v1/posts/delete/${id}`, config);
+  const response = await axios.get(`${conf.POST_BASE_URL}/delete/${id}`, config);
   if (response.status === 200) {
     return id;
   } else {
@@ -97,7 +98,7 @@ export const viewAllPost = createAsyncThunk('viewAllPost', async (_, { rejectWit
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.get(`/api/api/v1/posts/viewAllpost`, config);
+  const response = await axios.get(`${conf.POST_BASE_URL}/viewAllpost`, config);
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -113,7 +114,7 @@ export const createUserPost = createAsyncThunk('createUserPost', async (data, { 
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.post(`/api/api/v1/posts/createPost`, data, config);
+  const response = await axios.post(`${conf.POST_BASE_URL}/createPost`, data, config);
   if (response.statusCode === 200) {
     return response.data.data;
   } else {
@@ -134,7 +135,7 @@ export const editUserPost = createAsyncThunk('editUserPost', async (data, { reje
   formData.append('title', data.title);
   formData.append('description', data.description);
   formData.append('image', data.image);
-  const response = await axios.patch(`/api/api/v1/posts/editPost/${data.id}`, formData, config);
+  const response = await axios.patch(`${conf.POST_BASE_URL}/editPost/${data.id}`, formData, config);
 
   if (response.status === 200) {
     return response.data.data;

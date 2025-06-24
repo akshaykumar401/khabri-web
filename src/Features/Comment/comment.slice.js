@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import conf from '../../Config/config.js';
 
 const initialState = {
   commentData: {},
@@ -15,7 +16,7 @@ export const sendCommentToBack = createAsyncThunk('sendCommentToBack', async (da
       Authorization: `Bearer ${refreshToken}`,
     },
   };
-  const response = await axios.post(`/api/api/v1/comments/sendComment`, data, config);
+  const response = await axios.post(`${conf.COMMENT_BASE_URL}/sendComment`, data, config);
 
   if (response.status === 200) {
     return response.data;
