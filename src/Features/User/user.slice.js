@@ -12,7 +12,7 @@ const initialState = {
 
 // Login user action...
 export const loginUser = createAsyncThunk('loginUser', async (userData, { rejectWithValue }) => {
-  const response = await axios.post(`${conf.USER_BASE_URL}/login`, userData);
+  const response = await axios.post(`${conf.BASE_URL}/api/v1/uses/login`, userData);
   if (response.status === 200) {
     localStorage.setItem("accessToken", response.data.data.accessToken);
     localStorage.setItem("refreshToken", response.data.data.refreshToken);
