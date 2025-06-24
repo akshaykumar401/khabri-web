@@ -10,14 +10,14 @@ export default defineConfig({
     tailwindcss(),
     flowbiteReact()
   ],
-  // server: {
-  //   proxy: {
-  //     '/api': {
-  //       // target: 'http://localhost:8000',
-  //       target: 'https://newsbackend-sran.onrender.com',
-  //       changeOrigin: true,
-  //       rewrite: (path) => path.replace(/^\/api/, ''),
-  //     },
-  //   }
-  // }
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        // target: 'https://newsbackend-sran.onrender.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    }
+  }
 })
