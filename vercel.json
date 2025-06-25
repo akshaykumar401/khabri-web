@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/apii/(.*)",
-      "destination": "https://newsbackend-sran.onrender.com"
+      "destination": "https://newsbackend-sran.onrender.com/"
     }
   ]
 }
