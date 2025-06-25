@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://newsbackend-sran.onrender.com/api/v1"
+      "source": "/apii/(.*)",
+      "destination": "https://newsbackend-sran.onrender.com"
     }
   ]
 }

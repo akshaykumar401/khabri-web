@@ -18,7 +18,7 @@ function App() {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`/api/uses/generateReferanceToken`, {
+      const response = await axios.get(`/apii/api/v1/uses/generateReferanceToken`, {
         withCredentials: true,
       });
 

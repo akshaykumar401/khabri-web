@@ -11,7 +11,7 @@ const initialState = {
 
 // Login user action...
 export const loginUser = createAsyncThunk('loginUser', async (userData, { rejectWithValue }) => {
-  const response = await axios.post(`/api/uses/login`, userData);
+  const response = await axios.post(`/apii/api/v1/uses/login`, userData);
   if (response.status === 200) {
     return response.data.data.user;
   } else {
@@ -21,7 +21,7 @@ export const loginUser = createAsyncThunk('loginUser', async (userData, { reject
 
 // Getting Other User Data...
 export const getOtherUserData = createAsyncThunk('getOtherUserData', async (username, { rejectWithValue }) => {
-  const response = await axios.get(`/api/uses/otherUserProfile/${username}`, {
+  const response = await axios.get(`/apii/api/v1/uses/otherUserProfile/${username}`, {
     withCredentials: true,
   });
   if (response.status === 200) {
@@ -33,7 +33,7 @@ export const getOtherUserData = createAsyncThunk('getOtherUserData', async (user
 
 // Get Follow User Profile Methode...
 export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', async (_, { rejectWithValue }) => {
-  const respone = await axios.get(`/api/uses/following`, {
+  const respone = await axios.get(`/apii/api/v1/uses/following`, {
     withCredentials: true,
   });
   if (respone.status === 200) {
@@ -45,7 +45,7 @@ export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', asy
 
 // Edit Profile Photo Methode...
 export const editUserProfilePhoto = createAsyncThunk('editUserProfilePhoto', async (image, { rejectWithValue }) => {
-  const response = await axios.patch(`/api/uses/updateAvator`, image, {
+  const response = await axios.patch(`/apii/api/v1/uses/updateAvator`, image, {
     withCredentials: true,
   });
   if (response.status === 200) {
@@ -57,7 +57,7 @@ export const editUserProfilePhoto = createAsyncThunk('editUserProfilePhoto', asy
 
 // Edit Profile Detail Methode...
 export const editUserProfileDetail = createAsyncThunk('editUserProfileDetail', async (data, { rejectWithValue }) => {
-  const respone = await axios.patch(`/api/uses/updateProfile`, data, {
+  const respone = await axios.patch(`/apii/api/v1/uses/updateProfile`, data, {
     withCredentials: true,
   });
 
@@ -70,7 +70,7 @@ export const editUserProfileDetail = createAsyncThunk('editUserProfileDetail', a
 
 // Logout User Methode...
 export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithValue }) => {
-  const response = await axios.post(`/api/uses/logout`, {
+  const response = await axios.post(`/apii/api/v1/uses/logout`, {
     withCredentials: true,
   });
 
@@ -83,7 +83,7 @@ export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithV
 
 // SignUp User Methode...
 export const signUpUser = createAsyncThunk('signUpUser', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/api/uses/sigin`, data);
+  const response = await axios.post(`/apii/api/v1/uses/sigin`, data);
 
   if (response.status === 200) {
     return response.data.data;
@@ -94,7 +94,7 @@ export const signUpUser = createAsyncThunk('signUpUser', async (data, { rejectWi
 
 // Delete Account Methode...
 export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_, { rejectWithValue }) => {
-  const respone = await axios.delete(`/api/uses/deleteProfile`, {
+  const respone = await axios.delete(`/apii/api/v1/uses/deleteProfile`, {
     withCredentials: true,
   });
 
@@ -107,7 +107,7 @@ export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_,
 
 // Forget Password Methode...
 export const changePassword = createAsyncThunk('changePassword', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/api/uses/forgotPassword`, data)
+  const response = await axios.post(`/apii/api/v1/uses/forgotPassword`, data)
 
   if (response.status === 200) {
     return response.data.data;
