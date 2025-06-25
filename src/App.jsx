@@ -10,7 +10,6 @@ import {
 import axios from "axios";
 import { refreshUser } from './Features/User/user.slice.js';
 import { useDispatch } from 'react-redux';
-import secret from './Config/secret.js';
 
 function App() {
   const dispatch = useDispatch();
@@ -19,7 +18,7 @@ function App() {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`${secret.BASE_URL}/api/v1/uses/generateReferanceToken`, {
+      const response = await axios.get(`/api/uses/generateReferanceToken`, {
         withCredentials: true,
       });
 
