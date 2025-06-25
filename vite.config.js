@@ -16,7 +16,8 @@ export default defineConfig({
         target: 'https://newsbackend-sran.onrender.com',
         changeOrigin: true,
         secure: false,
-        cookieDomainRewrite: '',
+        // cookieDomainRewrite: '',
+        cookieDomainRewrite: 'localhost',
         rewrite: (path) => path.replace(/^\/apii/, ''),
       },
     }
