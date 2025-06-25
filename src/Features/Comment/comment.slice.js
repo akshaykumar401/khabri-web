@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import secret from '../../Config/secret.js';
 
 const initialState = {
   commentData: {},
@@ -9,7 +10,7 @@ const initialState = {
 
 // Send Comment To Backend Methode...
 export const sendCommentToBack = createAsyncThunk('sendCommentToBack', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/apii/api/v1/comments/sendComment`, data, {
+  const response = await axios.post(`${secret.BASE_URL}/api/v1/comments/sendComment`, data, {
     withCredentials: true,
   });
 

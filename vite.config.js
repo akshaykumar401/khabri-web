@@ -12,7 +12,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/apii': {
+      '/api': {
         target: 'https://newsbackend-sran.onrender.com',
         changeOrigin: true,
         secure: false,
