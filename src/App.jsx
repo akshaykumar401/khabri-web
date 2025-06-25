@@ -8,8 +8,11 @@ import {
   Loading2,
 } from "../src/Components/Components.js";
 import axios from "axios";
+import { refreshUser } from './Features/User/user.slice.js';
+import { useDispatch } from 'react-redux';
 
 function App() {
+  const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,7 +25,7 @@ function App() {
       setIsLoading(false);
       if (response.data.statusCode === 200) {
         setIsLoggedIn(false);
-        // dispatch(refereshToken(response.data.data));
+        dispatch(refreshUser(response.data.data.user))
       } else {
         setIsLoading(false);
         setIsLoggedIn(true);

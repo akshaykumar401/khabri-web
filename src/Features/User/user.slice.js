@@ -121,6 +121,10 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    // Add a reducer to Add userData after auto Login...
+    refreshUser: (state, action) => {
+      state.userData = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -244,5 +248,5 @@ export const userSlice = createSlice({
   }
 })
 
-// export const { refereshToken } = userSlice.actions;
+export const { refreshUser } = userSlice.actions;
 export default userSlice.reducer;
