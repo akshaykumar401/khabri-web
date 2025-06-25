@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import conf from '../../Config/config.js';
+import secret from '../../Config/secret.js';
 
 const initialState = {
   userPost: [],
@@ -12,13 +12,9 @@ const initialState = {
 
 // Method for Fetching User Posts...
 export const allUserPost = createAsyncThunk('allUserPost', async (_, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.get(`${conf.POST_BASE_URL}/viewUserPost`, config);
+
+  const response = await axios.get(`/api/api/v1/posts/viewUserPost`, { withCredentials: true });
+
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -28,13 +24,9 @@ export const allUserPost = createAsyncThunk('allUserPost', async (_, { rejectWit
 
 // Methode For View Post...
 export const viewPost = createAsyncThunk('viewPost', async (id, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.get(`${conf.POST_BASE_URL}/viewPost/${id}`, config);
+  const response = await axios.get(`/api/api/v1/posts/viewPost/${id}`, {
+    withCredentials: true,
+  });
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -44,13 +36,9 @@ export const viewPost = createAsyncThunk('viewPost', async (id, { rejectWithValu
 
 // Like Post Methode...
 export const likePost = createAsyncThunk('likePost', async (id, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.patch(`${conf.POST_BASE_URL}/likePost/${id}`, config);
+  const response = await axios.patch(`/api/api/v1/posts/likePost/${id}`, {
+    withCredentials: true,
+  });
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -60,13 +48,9 @@ export const likePost = createAsyncThunk('likePost', async (id, { rejectWithValu
 
 // DisLike Post Methode...
 export const dislikePost = createAsyncThunk('dislikePost', async (id, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.patch(`${conf.POST_BASE_URL}/dislikePost/${id}`, config);
+  const response = await axios.patch(`/api/api/v1/posts/dislikePost/${id}`, {
+    withCredentials: true,
+  });
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -76,13 +60,9 @@ export const dislikePost = createAsyncThunk('dislikePost', async (id, { rejectWi
 
 // Delete Post Methode...
 export const deleteYourPost = createAsyncThunk('deleteYourPost', async (id, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.get(`${conf.POST_BASE_URL}/delete/${id}`, config);
+  const response = await axios.get(`/api/api/v1/posts/delete/${id}`, {
+    withCredentials: true,
+  });
   if (response.status === 200) {
     return id;
   } else {
@@ -92,13 +72,9 @@ export const deleteYourPost = createAsyncThunk('deleteYourPost', async (id, { re
 
 // View All Post Methode...
 export const viewAllPost = createAsyncThunk('viewAllPost', async (_, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.get(`${conf.POST_BASE_URL}/viewAllpost`, config);
+  const response = await axios.get(`/api/api/v1/posts/viewAllpost`, {
+    withCredentials: true,
+  });
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -108,13 +84,9 @@ export const viewAllPost = createAsyncThunk('viewAllPost', async (_, { rejectWit
 
 // Create Post Methode...
 export const createUserPost = createAsyncThunk('createUserPost', async (data, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.post(`${conf.POST_BASE_URL}/createPost`, data, config);
+  const response = await axios.post(`${secret.POST_BASE_URL}/createPost`, data, {
+    withCredentials: true,
+  });
   if (response.statusCode === 200) {
     return response.data.data;
   } else {
@@ -124,18 +96,13 @@ export const createUserPost = createAsyncThunk('createUserPost', async (data, { 
 
 // Edid Post Methode...
 export const editUserPost = createAsyncThunk('editUserPost', async (data, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-
   const formData = new FormData();
   formData.append('title', data.title);
   formData.append('description', data.description);
   formData.append('image', data.image);
-  const response = await axios.patch(`${conf.POST_BASE_URL}/editPost/${data.id}`, formData, config);
+  const response = await axios.patch(`${secret.POST_BASE_URL}/editPost/${data.id}`, formData, {
+    withCredentials: true,
+  });
 
   if (response.status === 200) {
     return response.data.data;

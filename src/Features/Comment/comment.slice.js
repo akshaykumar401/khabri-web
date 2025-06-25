@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import conf from '../../Config/config.js';
 
 const initialState = {
   commentData: {},
@@ -10,13 +9,9 @@ const initialState = {
 
 // Send Comment To Backend Methode...
 export const sendCommentToBack = createAsyncThunk('sendCommentToBack', async (data, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.post(`${conf.COMMENT_BASE_URL}/sendComment`, data, config);
+  const response = await axios.post(`/api/api/v1/comments/sendComment`, data, {
+    withCredentials: true,
+  });
 
   if (response.status === 200) {
     return response.data;
@@ -32,7 +27,7 @@ export const commentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // 
+      // Send Comment Action...
       .addCase(sendCommentToBack.pending, (state) => {
         state.loading = true;
         state.error = null;

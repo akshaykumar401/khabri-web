@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import conf from '../../Config/config.js';
 
 const initialState = {
   userData: {},
@@ -12,10 +11,8 @@ const initialState = {
 
 // Login user action...
 export const loginUser = createAsyncThunk('loginUser', async (userData, { rejectWithValue }) => {
-  const response = await axios.post(`${conf.USER_BASE_URL}/login`, userData);
+  const response = await axios.post(`/api/api/v1/uses/login`, userData);
   if (response.status === 200) {
-    localStorage.setItem("accessToken", response.data.data.accessToken);
-    localStorage.setItem("refreshToken", response.data.data.refreshToken);
     return response.data.data.user;
   } else {
     return rejectWithValue(response.data);
@@ -24,13 +21,9 @@ export const loginUser = createAsyncThunk('loginUser', async (userData, { reject
 
 // Getting Other User Data...
 export const getOtherUserData = createAsyncThunk('getOtherUserData', async (username, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-  const response = await axios.get(`${conf.USER_BASE_URL}/otherUserProfile/${username}`, config);
+  const response = await axios.get(`/api/api/v1/uses/otherUserProfile/${username}`, {
+    withCredentials: true,
+  });
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -40,14 +33,9 @@ export const getOtherUserData = createAsyncThunk('getOtherUserData', async (user
 
 // Get Follow User Profile Methode...
 export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', async (_, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-
-  const respone = await axios.get(`${conf.USER_BASE_URL}/following`, config);
+  const respone = await axios.get(`/api/api/v1/uses/following`, {
+    withCredentials: true,
+  });
   if (respone.status === 200) {
     return respone.data.data;
   } else {
@@ -57,14 +45,9 @@ export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', asy
 
 // Edit Profile Photo Methode...
 export const editUserProfilePhoto = createAsyncThunk('editUserProfilePhoto', async (image, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-
-  const response = await axios.patch(`${conf.USER_BASE_URL}/updateAvator`, image, config);
+  const response = await axios.patch(`/api/api/v1/uses/updateAvator`, image, {
+    withCredentials: true,
+  });
   if (response.status === 200) {
     return response.data.data;
   } else {
@@ -74,14 +57,9 @@ export const editUserProfilePhoto = createAsyncThunk('editUserProfilePhoto', asy
 
 // Edit Profile Detail Methode...
 export const editUserProfileDetail = createAsyncThunk('editUserProfileDetail', async (data, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-
-  const respone = await axios.patch(`${conf.USER_BASE_URL}/updateProfile`, data, config);
+  const respone = await axios.patch(`/api/api/v1/uses/updateProfile`, data, {
+    withCredentials: true,
+  });
 
   if (respone.status === 200) {
     return respone.data.data;
@@ -92,14 +70,9 @@ export const editUserProfileDetail = createAsyncThunk('editUserProfileDetail', a
 
 // Logout User Methode...
 export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-
-  const response = await axios.post(`${conf.USER_BASE_URL}/logout`, config);
+  const response = await axios.post(`/api/api/v1/uses/logout`, {
+    withCredentials: true,
+  });
 
   if (response.status === 200) {
     return response.data.data;
@@ -110,7 +83,7 @@ export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithV
 
 // SignUp User Methode...
 export const signUpUser = createAsyncThunk('signUpUser', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`${conf.USER_BASE_URL}/sigin`, data);
+  const response = await axios.post(`/api/api/v1/uses/sigin`, data);
 
   if (response.status === 200) {
     return response.data.data;
@@ -121,14 +94,9 @@ export const signUpUser = createAsyncThunk('signUpUser', async (data, { rejectWi
 
 // Delete Account Methode...
 export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_, { rejectWithValue }) => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  };
-
-  const respone = await axios.delete(`${conf.USER_BASE_URL}/deleteProfile`, config);
+  const respone = await axios.delete(`/api/api/v1/uses/deleteProfile`, {
+    withCredentials: true,
+  });
 
   if (respone.status === 200) {
     return respone.data.data;
@@ -139,7 +107,7 @@ export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_,
 
 // Forget Password Methode...
 export const changePassword = createAsyncThunk('changePassword', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`${conf.USER_BASE_URL}/forgotPassword`, data)
+  const response = await axios.post(`/api/api/v1/uses/forgotPassword`, data)
 
   if (response.status === 200) {
     return response.data.data;
@@ -153,14 +121,6 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    refereshToken: (state, action) => {
-      state.userData = action.payload.user;
-
-      if (action.payload.refreshToken && action.payload.accessToken) {
-        localStorage.setItem("refreshToken", action.payload.refreshToken);
-        localStorage.setItem("accessToken", action.payload.accessToken);
-      }
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -284,5 +244,5 @@ export const userSlice = createSlice({
   }
 })
 
-export const { refereshToken } = userSlice.actions;
+// export const { refereshToken } = userSlice.actions;
 export default userSlice.reducer;

@@ -13,9 +13,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
-        // target: 'https://newsbackend-sran.onrender.com',
+        target: 'https://newsbackend-sran.onrender.com',
         changeOrigin: true,
+        secure: false,
+        cookieDomainRewrite: '',
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     }

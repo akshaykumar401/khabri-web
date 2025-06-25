@@ -8,28 +8,21 @@ import {
   Loading2,
 } from "../src/Components/Components.js";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { refereshToken } from "./Features/User/user.slice.js";
-import conf from './Config/config.js';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
 
-  const fetchUserData = async (REF) => {
+  const fetchUserData = async () => {
     try {
-      const config = {
-        headers: {
-          Authorization: `${REF}`,
-        },
-      };
-      const response = await axios.get(`${conf.USER_BASE_URL}/generateReferanceToken`, config);
+      const response = await axios.get(`/api/api/v1/uses/generateReferanceToken`, {
+        withCredentials: true,
+      });
 
       setIsLoading(false);
       if (response.data.statusCode === 200) {
         setIsLoggedIn(false);
-        dispatch(refereshToken(response.data.data));
+        // dispatch(refereshToken(response.data.data));
       } else {
         setIsLoading(false);
         setIsLoggedIn(true);
@@ -44,15 +37,7 @@ function App() {
   // Checking User is Logged In or Not
   useEffect(() => {
     setIsLoading(true);
-
-    // Check if refresh token exists in localStorage
-    const REF = localStorage.getItem("refreshToken");
-    if (!REF) {
-      setIsLoggedIn(true);
-      setIsLoading(false);
-      return;
-    }
-    fetchUserData(REF);
+    fetchUserData();
   }, []);
 
   return (
