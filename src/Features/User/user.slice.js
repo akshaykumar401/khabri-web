@@ -12,6 +12,7 @@ const initialState = {
 // Login user action...
 export const loginUser = createAsyncThunk('loginUser', async (userData, { rejectWithValue }) => {
   const response = await axios.post(`/apii/api/v1/uses/login`, userData);
+  console.log(response.data)
   if (response.status === 200) {
     return response.data.data.user;
   } else {
