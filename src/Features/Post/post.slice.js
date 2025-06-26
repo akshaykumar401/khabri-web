@@ -11,102 +11,141 @@ const initialState = {
 
 // Method for Fetching User Posts...
 export const allUserPost = createAsyncThunk('allUserPost', async (_, { rejectWithValue }) => {
-
-  const response = await axios.get(`/apii/api/v1/posts/viewUserPost`, { withCredentials: true });
-
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.get(`/apii/api/v1/posts/viewUserPost`, { withCredentials: true });
+  
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // Methode For View Post...
 export const viewPost = createAsyncThunk('viewPost', async (id, { rejectWithValue }) => {
-  const response = await axios.get(`/apii/api/v1/posts/viewPost/${id}`, {
-    withCredentials: true,
-  });
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.get(`/apii/api/v1/posts/viewPost/${id}`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 });
 
 // Like Post Methode...
 export const likePost = createAsyncThunk('likePost', async (id, { rejectWithValue }) => {
-  const response = await axios.patch(`/apii/api/v1/posts/likePost/${id}`, {
-    withCredentials: true,
-  });
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.patch(`/apii/api/v1/posts/likePost/${id}`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // DisLike Post Methode...
 export const dislikePost = createAsyncThunk('dislikePost', async (id, { rejectWithValue }) => {
-  const response = await axios.patch(`/apii/api/v1/posts/dislikePost/${id}`, {
-    withCredentials: true,
-  });
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.patch(`/apii/api/v1/posts/dislikePost/${id}`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 });
 
 // Delete Post Methode...
 export const deleteYourPost = createAsyncThunk('deleteYourPost', async (id, { rejectWithValue }) => {
-  const response = await axios.get(`/apii/api/v1/posts/delete/${id}`, {
-    withCredentials: true,
-  });
-  if (response.status === 200) {
-    return id;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.get(`/apii/api/v1/posts/delete/${id}`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      return id;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 });
 
 // View All Post Methode...
 export const viewAllPost = createAsyncThunk('viewAllPost', async (_, { rejectWithValue }) => {
-  const response = await axios.get(`/apii/api/v1/posts/viewAllpost`, {
-    withCredentials: true,
-  });
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.get(`/apii/api/v1/posts/viewAllpost`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 });
 
 // Create Post Methode...
 export const createUserPost = createAsyncThunk('createUserPost', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/apii/api/v1/posts/createPost`, data, {
-    withCredentials: true,
-  });
-  if (response.statusCode === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.post(`/apii/api/v1/posts/createPost`, data, {
+      withCredentials: true,
+    });
+    if (response.statusCode === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 });
 
 // Edid Post Methode...
 export const editUserPost = createAsyncThunk('editUserPost', async (data, { rejectWithValue }) => {
-  const formData = new FormData();
-  formData.append('title', data.title);
-  formData.append('description', data.description);
-  formData.append('image', data.image);
-  const response = await axios.patch(`/api/posts/editPost/${data.id}`, formData, {
-    withCredentials: true,
-  });
-
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('image', data.image);
+    const response = await axios.patch(`/api/posts/editPost/${data.id}`, formData, {
+      withCredentials: true,
+    });
+  
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 

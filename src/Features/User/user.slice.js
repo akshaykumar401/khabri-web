@@ -11,109 +11,154 @@ const initialState = {
 
 // Login user action...
 export const loginUser = createAsyncThunk('loginUser', async (userData, { rejectWithValue }) => {
-  const response = await axios.post(`/apii/api/v1/uses/login`, userData);
-  console.log(response.data)
-  if (response.status === 200) {
-    return response.data.data.user;
-  } else {
-    return rejectWithValue(response.data);
+  try {
+    const response = await axios.post(`/apii/api/v1/uses/login`, userData);
+    
+    if (response.status === 200) {
+      return response.data.data.user;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 });
 
 // Getting Other User Data...
 export const getOtherUserData = createAsyncThunk('getOtherUserData', async (username, { rejectWithValue }) => {
-  const response = await axios.get(`/apii/api/v1/uses/otherUserProfile/${username}`, {
-    withCredentials: true,
-  });
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.get(`/apii/api/v1/uses/otherUserProfile/${username}`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // Get Follow User Profile Methode...
 export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', async (_, { rejectWithValue }) => {
-  const respone = await axios.get(`/apii/api/v1/uses/following`, {
-    withCredentials: true,
-  });
-  if (respone.status === 200) {
-    return respone.data.data;
-  } else {
-    return rejectWithValue(respone.data.message);
+  try {
+    const respone = await axios.get(`/apii/api/v1/uses/following`, {
+      withCredentials: true,
+    });
+    if (respone.status === 200) {
+      return respone.data.data;
+    } else {
+      return rejectWithValue(respone.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // Edit Profile Photo Methode...
 export const editUserProfilePhoto = createAsyncThunk('editUserProfilePhoto', async (image, { rejectWithValue }) => {
-  const response = await axios.patch(`/apii/api/v1/uses/updateAvator`, image, {
-    withCredentials: true,
-  });
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.patch(`/apii/api/v1/uses/updateAvator`, image, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // Edit Profile Detail Methode...
 export const editUserProfileDetail = createAsyncThunk('editUserProfileDetail', async (data, { rejectWithValue }) => {
-  const respone = await axios.patch(`/apii/api/v1/uses/updateProfile`, data, {
-    withCredentials: true,
-  });
-
-  if (respone.status === 200) {
-    return respone.data.data;
-  } else {
-    return rejectWithValue(respone.data.message);
+  try {
+    const respone = await axios.patch(`/apii/api/v1/uses/updateProfile`, data, {
+      withCredentials: true,
+    });
+  
+    if (respone.status === 200) {
+      return respone.data.data;
+    } else {
+      return rejectWithValue(respone.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // Logout User Methode...
 export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithValue }) => {
-  const response = await axios.post(`/apii/api/v1/uses/logout`, {
-    withCredentials: true,
-  });
-
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.post(`/apii/api/v1/uses/logout`, {
+      withCredentials: true,
+    });
+  
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // SignUp User Methode...
 export const signUpUser = createAsyncThunk('signUpUser', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/apii/api/v1/uses/sigin`, data);
-
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.post(`/apii/api/v1/uses/sigin`, data);
+  
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // Delete Account Methode...
 export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_, { rejectWithValue }) => {
-  const respone = await axios.delete(`/apii/api/v1/uses/deleteProfile`, {
-    withCredentials: true,
-  });
-
-  if (respone.status === 200) {
-    return respone.data.data;
-  } else {
-    return rejectWithValue(respone.data.message);
+  try {
+    const respone = await axios.delete(`/apii/api/v1/uses/deleteProfile`, {
+      withCredentials: true,
+    });
+  
+    if (respone.status === 200) {
+      return respone.data.data;
+    } else {
+      return rejectWithValue(respone.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
 // Forget Password Methode...
 export const changePassword = createAsyncThunk('changePassword', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/apii/api/v1/uses/forgotPassword`, data)
-
-  if (response.status === 200) {
-    return response.data.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.post(`/apii/api/v1/uses/forgotPassword`, data)
+  
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
@@ -153,7 +198,7 @@ export const userSlice = createSlice({
       })
       .addCase(getOtherUserData.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
+        state.error = action.payload || "Failed Fetching Other User Data";
       })
       // Get All Followed User Profile Action...
       .addCase(getFollowUserProfile.pending, (state) => {
@@ -166,7 +211,7 @@ export const userSlice = createSlice({
       })
       .addCase(getFollowUserProfile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
+        state.error = action.payload || "Failed Getting Followed User Profile";
       })
       // Update User Profile Action...
       .addCase(editUserProfilePhoto.pending, (state) => {
@@ -218,7 +263,7 @@ export const userSlice = createSlice({
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Fail To Logout User.";
+        state.error = action.payload || "Fail To Create User.";
       })
       // Delete User Action...
       .addCase(deleteUserAccount.pending, (state) => {

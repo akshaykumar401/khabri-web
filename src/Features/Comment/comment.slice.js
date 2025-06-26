@@ -9,14 +9,19 @@ const initialState = {
 
 // Send Comment To Backend Methode...
 export const sendCommentToBack = createAsyncThunk('sendCommentToBack', async (data, { rejectWithValue }) => {
-  const response = await axios.post(`/apii/api/v1/comments/sendComment`, data, {
-    withCredentials: true,
-  });
-
-  if (response.status === 200) {
-    return response.data;
-  } else {
-    return rejectWithValue(response.data.message);
+  try {
+    const response = await axios.post(`/apii/api/v1/comments/sendComment`, data, {
+      withCredentials: true,
+    });
+  
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return rejectWithValue(response.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
   }
 })
 
