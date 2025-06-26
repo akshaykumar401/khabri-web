@@ -19,6 +19,17 @@ export default defineConfig({
         // cookieDomainRewrite: '',
         cookieDomainRewrite: 'localhost',
         rewrite: (path) => path.replace(/^\/apii/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyRes', (proxyRes) => {
+            // Enable cookies to pass through
+            const cookies = proxyRes.headers['set-cookie'];
+            if (cookies) {
+              proxyRes.headers['set-cookie'] = cookies.map(cookie =>
+                cookie.replace(/;(\s)?Secure/, '') // optionally remove Secure for local dev
+              );
+            }
+          });
+        },
       },
     }
   }
