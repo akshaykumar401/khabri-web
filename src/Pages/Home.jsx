@@ -6,6 +6,7 @@ import { viewAllPost } from '../Features/Post/post.slice.js';
 const Home = () => {
   const dispatch = useDispatch();
   const { allPost } = useSelector((state) => state.post);
+  const { userData } = useSelector((state) => state.user);
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
@@ -15,8 +16,10 @@ const Home = () => {
   }, [allPost]);
 
   useEffect(() => {
-    dispatch(viewAllPost());
-  }, []);
+    if (userData) {
+      dispatch(viewAllPost());
+    }
+  }, [userData, dispatch]);
 
   return (
     <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">

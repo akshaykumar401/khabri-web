@@ -10,7 +10,13 @@ const User = () => {
 
 
   useEffect(() => {
-    dispatch(allUserPost());
+    if (userData) {
+      dispatch(allUserPost(userData._id));
+    }
+  }, [userData, dispatch]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   return (

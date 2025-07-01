@@ -17,7 +17,12 @@ const OtherUserProfile = () => {
   }, [otherUser]);
 
   useEffect(() => {
-    dispatch(getOtherUserData(username));
+    if (userData) {
+      dispatch(getOtherUserData(username));
+    }
+  }, [userData, dispatch, username]);
+
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
