@@ -13,7 +13,7 @@ const Followed = () => {
   }, [])
 
   useEffect(() => {
-    if(followedUser.length > 0) {
+    if (followedUser.length > 0) {
       setAllProfile(followedUser);
     }
   }, [followedUser])
@@ -25,11 +25,21 @@ const Followed = () => {
           All Followed
         </h2>
 
-        {allProfile?.map((profile) => {
-          return (
-            <UsernameCard key={profile._id} username={profile.username} />
-          )
-        })}
+      {allProfile?.length === 0 ? (
+        <h2 className="pl-8 text-xl mx-16 mt-2 mb-4 font-semibold">
+          No Followed
+        </h2>
+      ) : (
+        <>
+        {
+          allProfile.map((profile) => {
+            return (
+              <UsernameCard key={profile._id} id={profile._id} username={profile.username} />
+            )
+          })
+        }
+        </>
+      )}
       </div>
     </div>
   );

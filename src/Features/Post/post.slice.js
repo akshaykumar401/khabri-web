@@ -134,7 +134,7 @@ export const editUserPost = createAsyncThunk('editUserPost', async (data, { reje
     formData.append('title', data.title);
     formData.append('description', data.description);
     formData.append('image', data.image);
-    const response = await axios.patch(`/api/posts/editPost/${data.id}`, formData, {
+    const response = await axios.patch(`/apii/api/v1/posts/editPost/${data.id}`, formData, {
       withCredentials: true,
     });
   

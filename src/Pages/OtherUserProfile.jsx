@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import { useParams  } from "react-router-dom"
 import { ProfileHeader, PostCard } from "../Components/Components.js";
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,19 +8,21 @@ const OtherUserProfile = () => {
   const { username } = useParams()
   const dispatch = useDispatch();
   const [data, setData] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const { otherUser, userData } = useSelector((state) => state.user);
 
   useEffect(() => {
     setData(otherUser);
-    setIsAdmin(userData?._id === data?._id ? true : false)
+    setPosts(otherUser?.post);
+    setIsAdmin(otherUser?._id === userData?._id ? true : false)
   }, [otherUser]);
 
   useEffect(() => {
     if (userData) {
-      dispatch(getOtherUserData(username));
+      dispatch(getOtherUserData(username))
     }
-  }, [userData, dispatch, username]);
+  }, [otherUser, dispatch, username]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -44,9 +46,8 @@ const OtherUserProfile = () => {
             All Posts
           </h2>
 
-          {data && data?.post?.length > 0 ? (
-            data?.post?.map((singlePost) => (
-              // <PostCard key={singlePost._id} id={singlePost._id} />
+          {data && posts?.length > 0 ? (
+            posts?.map((singlePost) => (
               <PostCard id={singlePost._id} key={singlePost._id} isFollowButton={isAdmin} username={username}/>
             ))
           ) : (

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { followUser, unfollowUser } from '../Features/User/user.slice.js';
+import { useDispatch } from 'react-redux';
 
 const PostCard = ({ id }) => {
   const navigate = useNavigate();
@@ -9,6 +11,7 @@ const PostCard = ({ id }) => {
   const [singlePost, setSinglePost] = useState({});
   const { allPost } = useSelector((state) => state.post);
   const { userData } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   // SetDisplayFollowButton(isFollowButton);
 
@@ -33,7 +36,16 @@ const PostCard = ({ id }) => {
   }
 
   const HandleFollow = () => {
-    SetIsFollowed(!isFollowed);
+    const postUserId = singlePost[0]?.user?._id;
+    if (!isFollowed) {
+      dispatch(followUser(postUserId)).then((action) => 
+        SetIsFollowed(!isFollowed)
+      )
+    } else {
+      dispatch(unfollowUser(postUserId)).then((action) => 
+        SetIsFollowed(!isFollowed)
+      )
+    }
   }
 
   const OpenProfile = () => {

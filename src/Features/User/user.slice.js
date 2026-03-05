@@ -162,6 +162,48 @@ export const changePassword = createAsyncThunk('changePassword', async (data, { 
   }
 })
 
+// Follow user Methode...
+export const followUser = createAsyncThunk('followUser', async (id, { rejectWithValue }) => {
+  try {
+    const respone = await axios.patch(`/apii/api/v1/uses/follow/${id}`,null, {
+      params: {
+        userId: id,
+      }
+    }, {
+      withCredentials: true,
+    });
+    if (respone.status === 200) {
+      return respone.data.data;
+    } else {
+      return rejectWithValue(respone.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
+  }
+})
+
+// Unfollow user Methode...
+export const unfollowUser = createAsyncThunk('unfollowUser', async (id, { rejectWithValue }) => {
+  try {
+    const respone = await axios.patch(`/apii/api/v1/uses/unfollow/${id}`,{
+      params: {
+        userId: id,
+      }
+    }, {
+      withCredentials: true,
+    });
+    if (respone.status === 200) {
+      return respone.data.data;
+    } else {
+      return rejectWithValue(respone.data.message);
+    }
+  } catch (error) {
+    console.error(`ERROR: ${error.response.statusText}`);
+    return rejectWithValue(error.response.statusText);
+  }
+})
+
 // User Slice for managing user authentication state
 export const userSlice = createSlice({
   name: "user",
@@ -290,6 +332,32 @@ export const userSlice = createSlice({
       .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Fail To Change Password.";
+      })
+      // Follow User Action...
+      .addCase(followUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(followUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(followUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Fail To Follow User.";
+      })
+      // Unfollow User Action...
+      .addCase(unfollowUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(unfollowUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(unfollowUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Fail To Unfollow User.";
       })
   }
 })

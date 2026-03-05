@@ -78,8 +78,8 @@ const SignUp = ({ setIsLoggedIn }) => {
   return (
     <div className="bg-white sm:pb-0 pb-5 rounded-lg text-black flex-col-reverse items-center sm:flex-row sm:items-start flex justify-around w-full sm:h-full">
       {isErrorOpen && <ERROR text={error} setIsErrorOpen={setIsErrorOpen} />}
-      <div className="sm:w-[45%] w-[95%] py-4 pb-8 h-[90%] mt-2 sm:mt-4 p-2 border-1 rounded-lg">
-        <form className="flex flex-col gap-2" onSubmit={handleSignUp}>
+      <div className="sm:w-[45%] w-[95%] py-4 pb-8 h-[95%] mt-2 sm:mt-4 p-2 border-1 rounded-lg">
+        <form className="flex flex-col gap-0.5" onSubmit={handleSignUp}>
           <div className="flex items-center justify-between">
             <label
               className="text-xl bg-green-400 hover:bg-green-500 cursor-pointer duration-400 active:scale-95 ease-in-out font-['Titillium+Web'] border-1 p-2 rounded-lg mt-4"

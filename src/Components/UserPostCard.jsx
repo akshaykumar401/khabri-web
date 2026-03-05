@@ -41,7 +41,7 @@ const UserPostCard = ({ id }) => {
 
   return (
     <div className="w-full bg-white  text-black px-4 py-2 dark:text-white dark:bg-slate-950 rounded-lg h-98 mb-5 mt-2 cursor-pointer">
-      {isAlertOpen && <DeletePostAlert id={id} setIsAlertOpen={setIsAlertOpen} setPostDeletedAlert={setPostDeletedAlert} />}
+      {isAlertOpen && <DeletePostAlert id={id} />}
       {postDeletedAlert && <DeletePostSuccessFullAlert setPostDeletedAlert={setPostDeletedAlert} />}
 
       <div className="w-[100%] py-4 h-10 mt-2 mx-auto rounded-lg bg-slate-600 justify-between flex px-4 items-center inset-shadow-sm inset-shadow-slate-800 text-white">

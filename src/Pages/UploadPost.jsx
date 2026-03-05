@@ -49,7 +49,8 @@ const UploadPost = () => {
     formData.append("image", image.files[0]);
 
     dispatch(createUserPost(formData)).then((action) => {
-      if (action.type === "createUserPost/fulfilled") {
+      console.log(action.payload);
+      if (action.payload === "Post Created Successfully") {
         setImage(null)
         title.value = "";
         description.value = "";

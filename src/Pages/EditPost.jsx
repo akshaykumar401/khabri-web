@@ -68,7 +68,7 @@ const EditPost = () => {
     }
 
     dispatch(editUserPost(data)).then((action) => {
-      if (action.type === "editUserPost/fulfilled"){
+      if (action.payload._id === postId){
         setIsSuccessOpen(true);
         setSuccessMessage("Post Updated Successfully");
         navigate("/user");
@@ -79,8 +79,10 @@ const EditPost = () => {
 
   return (
     <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">
-      {isErrorOpen && <ERROR text={errorMessage} setIsErrorOpen={setIsErrorOpen}/>}
-      {isSuccessOpen && <SUCCESSFUL text={successMessage} setIsSuccessOpen={setIsSuccessOpen}/>}
+      <div className="z-[9999]">
+        {isErrorOpen && <ERROR text={errorMessage} setIsErrorOpen={setIsErrorOpen}/>}
+        {isSuccessOpen && <SUCCESSFUL text={successMessage} setIsSuccessOpen={setIsSuccessOpen}/>}
+      </div>
       <div className="w-xl dark:bg-slate-800 dark:text-white bg-gray-300 text-black px-4 py-2 rounded-lg">
         <h2 className="w-full text-2xl pl-4 mt-2 font-semibold font-['Comic Relief'] mb-8">
           EDIT POST
