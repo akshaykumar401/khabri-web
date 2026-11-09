@@ -5,120 +5,150 @@ import {
   faLock,
   faEye,
   faEyeSlash,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
-import LoginImage from "../../assets/Login.jpg";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../Features/User/user.slice.js";
+import { viewAllPost } from "../../Features/Post/post.slice.js";
+import brandLogo from "../../assets/brand-logo.png";
 
 const Login = ({ setActiveState, setIsLoggedIn }) => {
-  const [passwordState, setPasswordState] = useState("password");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  // Display password Methode...
-  const displayPassword = () => {
-    if (passwordState === "password") {
-      setPasswordState("text");
-    } else {
-      setPasswordState("password");
-    }
-  };
-
-  // Handling Login Form...
   const handleSignIn = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
     if (email && password) {
+      setLoading(true);
       const userInfo = { email, password };
       dispatch(loginUser(userInfo)).then((action) => {
+        setLoading(false);
         if (action.type === "loginUser/fulfilled") {
           setIsLoggedIn(false);
+          dispatch(viewAllPost());
         } else {
           setIsLoggedIn(true);
         }
       });
     }
-    e.target.reset();
   };
 
   return (
-    <div className="bg-white sm:pb-0 pb-5 rounded-lg text-black flex-col items-center sm:flex-row sm:items-start flex justify-around w-full sm:h-full">
-      <div className="sm:w-[50%] w-full">
-        <h2 className="pl-4 text-2xl sm:text-4xl font-semibold text-left font-['Tagesschrift'] mt-2">
-          Khabri
-        </h2>
+    <div className="w-full animate-fade-in">
+      {/* Mobile Branding Header */}
+      <div className="md:hidden flex items-center gap-3 mb-5 pb-4 border-b border-slate-100 dark:border-slate-800">
         <img
-          src={LoginImage}
-          alt="Login"
-          className="sm:w-[85%] w-[70%] mx-auto mt-2"
+          src={brandLogo}
+          alt="Khabri Logo"
+          className="w-10 h-10 rounded-xl object-contain bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 shadow-sm"
         />
-        <h3 className="text-2xl font-semibold text-center font-['Titillium+Web']">
-          Welcome Back!
-        </h3>
-        <p className="text-lg sm:mt-0 text-gray-500 sm:w-full w-[80%] mx-auto text-center font-['Titillium+Web']">
-          Thank You for Getting Back to Khabri, Please Login to your Account by
-          Filling out the form.
+        <div>
+          <h2 className="text-base font-extrabold font-brand tracking-tight text-[#1D3557] dark:text-white">
+            KHABRI
+          </h2>
+          <p className="text-[10px] uppercase font-bold tracking-wider text-[#2E5BFF]">
+            Your News. Amplified.
+          </p>
+        </div>
+      </div>
+
+      {/* Headline */}
+      <div className="mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold font-brand tracking-tight text-slate-900 dark:text-white">
+          Welcome back
+        </h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Sign in to amplify your perspective and join the discussion.
         </p>
       </div>
 
-      <div className="sm:w-[45%] w-[95%] py-4 pb-8 h-[90%] mt-2 sm:mt-4 p-2 border-1 rounded-lg">
-        <form className="flex flex-col gap-2" onSubmit={handleSignIn}>
-          <div className="border-1 p-2 rounded-lg mt-4">
-            <FontAwesomeIcon
-              icon={faEnvelope}
-              className="text-xl mr-2 font-light"
-            />
+      <form className="space-y-4" onSubmit={handleSignIn}>
+        {/* Email Address */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            Email Address
+          </label>
+          <div className="relative group">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+              <FontAwesomeIcon icon={faEnvelope} className="text-xs" />
+            </span>
             <input
               type="email"
-              placeholder="Email"
-              className="w-[80%] outline-none"
-              required
               name="email"
-            />
-          </div>
-          <div className="border-1 p-2 rounded-lg mt-4 flex w-full">
-            <FontAwesomeIcon
-              icon={faLock}
-              className="text-xl mr-2 font-light"
-            />
-            <input
-              type={passwordState}
-              placeholder="Password"
-              className="outline-none w-[80%]"
+              placeholder="you@domain.com"
               required
-              name="password"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
             />
-            {passwordState === "password" ? (
-              <FontAwesomeIcon
-                icon={faEye}
-                className="text-xl mr-2 font-light cursor-pointer"
-                onClick={displayPassword}
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                className="text-xl mr-2 font-light cursor-pointer"
-                onClick={displayPassword}
-              />
-            )}
           </div>
-          <button
-            type="submit"
-            className="bg-slate-500 text-white py-2 rounded-lg cursor-pointer mt-3 active:scale-95 duration-200 ease-in-out hover:bg-slate-600"
-          >
-            Login
-          </button>
-        </form>
+        </div>
 
-        <p className="mt-4 text-right text-gray-500">
-          Forget Password?
+        {/* Password */}
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Password
+            </label>
+            <button
+              type="button"
+              onClick={() => setActiveState(2)}
+              className="text-xs font-semibold text-[#2E5BFF] dark:text-[#527dff] hover:underline cursor-pointer"
+            >
+              Forgot password?
+            </button>
+          </div>
+          <div className="relative group">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+              <FontAwesomeIcon icon={faLock} className="text-xs" />
+            </span>
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="••••••••"
+              required
+              className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
+              title={showPassword ? "Hide password" : "Show password"}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className="text-xs" />
+            </button>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full mt-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#1D3557] to-[#2E5BFF] hover:from-[#162a45] hover:to-[#2248db] text-white font-semibold text-xs sm:text-sm shadow-lg shadow-[#2E5BFF]/25 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+        >
+          {loading ? (
+            <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : (
+            <>
+              <span>Sign In to Khabri</span>
+              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+            </>
+          )}
+        </button>
+      </form>
+
+      {/* Switch Tab Footer */}
+      <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Don't have an account yet?{" "}
           <button
-            className="text-blue-500 cursor-pointer"
-            onClick={() => setActiveState(2)}
+            type="button"
+            onClick={() => setActiveState(1)}
+            className="font-bold text-[#2E5BFF] dark:text-[#527dff] hover:underline cursor-pointer"
           >
-            {" "}
-            Reset
+            Create an account
           </button>
         </p>
       </div>

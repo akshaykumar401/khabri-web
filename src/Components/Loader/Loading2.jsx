@@ -1,106 +1,25 @@
 import React from 'react';
-import styled from 'styled-components';
+import brandLogo from '../../assets/brand-logo.png';
 
 const Loading2 = () => {
   return (
-    <StyledWrapper className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-      <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-[#0b0f17]/70 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="flex flex-col items-center gap-4 p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-[#2E5BFF]/10">
+        <div className="relative flex items-center justify-center">
+          <div className="w-20 h-20 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center p-2 shadow-xl shadow-[#2E5BFF]/20 animate-pulse">
+            <img src={brandLogo} alt="Khabri Logo" className="w-full h-full object-contain" />
+          </div>
+          <div className="absolute -inset-2 rounded-3xl border-2 border-[#2E5BFF]/30 border-t-[#2E5BFF] animate-spin" />
+        </div>
+        <div className="text-center">
+          <h3 className="text-sm font-bold font-brand tracking-tight text-slate-900 dark:text-white">
+            Khabri
+          </h3>
+          <p className="text-xs text-slate-400 mt-0.5">Your News. Social Media.</p>
         </div>
       </div>
-    </StyledWrapper>
+    </div>
   );
-}
-
-const StyledWrapper = styled.div`
-  #page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  #container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-
-  #h3 {
-    color: white;
-  }
-
-  #ring {
-    width: 190px;
-    height: 190px;
-    border: 1px solid transparent;
-    border-radius: 50%;
-    position: absolute;
-  }
-
-  #ring:nth-child(1) {
-    border-bottom: 8px solid rgb(255, 141, 249);
-    animation: rotate1 2s linear infinite;
-  }
-
-  @keyframes rotate1 {
-    from {
-      transform: rotateX(50deg) rotateZ(110deg);
-    }
-
-    to {
-      transform: rotateX(50deg) rotateZ(470deg);
-    }
-  }
-
-  #ring:nth-child(2) {
-    border-bottom: 8px solid rgb(255,65,106);
-    animation: rotate2 2s linear infinite;
-  }
-
-  @keyframes rotate2 {
-    from {
-      transform: rotateX(20deg) rotateY(50deg) rotateZ(20deg);
-    }
-
-    to {
-      transform: rotateX(20deg) rotateY(50deg) rotateZ(380deg);
-    }
-  }
-
-  #ring:nth-child(3) {
-    border-bottom: 8px solid rgb(0,255,255);
-    animation: rotate3 2s linear infinite;
-  }
-
-  @keyframes rotate3 {
-    from {
-      transform: rotateX(40deg) rotateY(130deg) rotateZ(450deg);
-    }
-
-    to {
-      transform: rotateX(40deg) rotateY(130deg) rotateZ(90deg);
-    }
-  }
-
-  #ring:nth-child(4) {
-    border-bottom: 8px solid rgb(252, 183, 55);
-    animation: rotate4 2s linear infinite;
-  }
-
-  @keyframes rotate4 {
-    from {
-      transform: rotateX(70deg) rotateZ(270deg);
-    }
-
-    to {
-      transform: rotateX(70deg) rotateZ(630deg);
-    }
-  }`;
+};
 
 export default Loading2;

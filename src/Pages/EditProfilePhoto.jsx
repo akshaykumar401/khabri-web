@@ -1,27 +1,29 @@
 import React, { useState, useId, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCamera, faCheck, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ERROR, SUCCESSFUL } from "../Components/Components.js";
 import { useSelector, useDispatch } from 'react-redux';
 import { editUserProfilePhoto } from '../Features/User/user.slice.js';
+import { useNavigate } from 'react-router-dom';
 
 const EditProfilePhoto = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isNewImage, setIsNewImage] = useState(null);
-  const uniqueId = useId();
-  const uniqueId2 = useId();
+  const inputId = useId();
 
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [oldImage, setOldImage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { userData } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (userData?.avator) {
-      setOldImage(userData.avator);
+    if (userData?.avator || userData?.avatar) {
+      setOldImage(userData.avator || userData.avatar);
     }
   }, [userData]);
 
@@ -46,29 +48,31 @@ const EditProfilePhoto = () => {
     }
   }, [isSuccessOpen]);
 
-  // Button Event Handler For Profile Change
   const handleProfileChange = () => {
-    if (isNewImage) {
-      const formData = new FormData();
-      formData.append("avator", isNewImage);
-      dispatch(editUserProfilePhoto(formData)).then((action) => {
-        if (action.type === 'editUserProfilePhoto/fulfilled') {
-          setIsSuccessOpen(true);
-          setSuccessMessage("Profile Photo Changed Successfully");
-          setIsNewImage(null);
-        }
-      });
-    } else {
+    if (!isNewImage) {
       setIsErrorOpen(true);
-      setErrorMessage("Pick an image");
+      setErrorMessage("Please select a new profile image first");
+      return;
     }
-  };
 
-  const UploadNewProfile = () => {
-    const imageInput = document.getElementById(uniqueId2);
-    if (imageInput) {
-      imageInput.click();
-    }
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("avator", isNewImage);
+
+    dispatch(editUserProfilePhoto(formData)).then((action) => {
+      setLoading(false);
+      if (action.type === 'editUserProfilePhoto/fulfilled') {
+        setIsSuccessOpen(true);
+        setSuccessMessage("Profile photo updated successfully!");
+        setIsNewImage(null);
+        setTimeout(() => {
+          navigate("/user");
+        }, 1200);
+      } else {
+        setIsErrorOpen(true);
+        setErrorMessage(action.payload || "Failed to update profile photo");
+      }
+    });
   };
 
   const oldImageSrc =
@@ -76,44 +80,98 @@ const EditProfilePhoto = () => {
       ? oldImage
       : "https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc";
 
-  const newImageSrc =
-    isNewImage instanceof File || isNewImage instanceof Blob
-      ? URL.createObjectURL(isNewImage)
-      : oldImageSrc;
-
   return (
-    <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">
+    <div className="w-full animate-fade-in">
       {isErrorOpen && <ERROR text={errorMessage} setIsErrorOpen={setIsErrorOpen}/>}
       {isSuccessOpen && <SUCCESSFUL text={successMessage} setIsSuccessOpen={setIsSuccessOpen}/>}
-      <div className="w-xl dark:bg-slate-800 dark:text-white bg-gray-300 text-black px-4 py-2 rounded-lg">
-        <h2 className="text-2xl mt-2 mb-4 font-['Titillium+Web'] font-semibold pl-6">
-          Edit Profile Photo
-        </h2>
 
-        <div className="w-full flex flex-col gap-2 justify-center items-center">
-          <div className="flex px-4 gap-4 items-center justify-around bg-slate-200 dark:bg-gray-600 rounded-xl w-[95%] mx-auto h-56">
-            <img src={oldImageSrc} alt="Old Profile" className="h-23 w-23 sm:w-40 sm:h-40 rounded-full border-1 object-cover" />
-            <FontAwesomeIcon icon={faArrowRight} className="text-4xl" />
+      {/* Breadcrumb */}
+      <div className="mb-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white active:scale-95 transition-all cursor-pointer"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+          <span>Back</span>
+        </button>
+      </div>
+
+      <div className="w-full max-w-xl mx-auto rounded-3xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 shadow-sm text-center animate-slide-up">
+        <div className="mb-6">
+          <h1 className="text-xl sm:text-2xl font-extrabold font-brand tracking-tight text-slate-900 dark:text-white">
+            Change Profile Picture
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            Choose a high quality image to represent yourself
+          </p>
+        </div>
+
+        {/* Visual Comparison Area */}
+        <div className="flex items-center justify-center gap-6 sm:gap-10 p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 my-6">
+          <div>
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 mx-auto shadow-md">
+              <img src={oldImageSrc} alt="Current Avatar" className="w-full h-full object-cover" />
+            </div>
+            <span className="block text-[11px] font-semibold text-slate-400 mt-2">Current Photo</span>
+          </div>
+
+          <FontAwesomeIcon icon={faArrowRight} className="text-slate-300 dark:text-slate-600 text-lg" />
+
+          <div>
+            <label
+              htmlFor={inputId}
+              className="relative block w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-dashed border-[#2E5BFF]/50 hover:border-[#2E5BFF] mx-auto shadow-md cursor-pointer group bg-white dark:bg-slate-900"
+            >
+              {isNewImage ? (
+                <img
+                  src={URL.createObjectURL(isNewImage)}
+                  alt="New Avatar"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-[#2E5BFF] dark:text-[#527dff] p-2">
+                  <FontAwesomeIcon icon={faCamera} className="text-xl mb-1 group-hover:scale-110 transition-transform" />
+                  <span className="text-[10px] font-semibold">Select Photo</span>
+                </div>
+              )}
+            </label>
             <input
               type="file"
               accept="image/*"
+              id={inputId}
               className="hidden"
-              id={uniqueId2}
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) setIsNewImage(file);
               }}
             />
-            <img
-              src={newImageSrc}
-              alt="New Profile"
-              className="h-23 cursor-pointer w-23 sm:w-40 sm:h-40 rounded-full border-1 object-cover"
-              id={uniqueId}
-              onClick={UploadNewProfile}
-            />
+            <span className="block text-[11px] font-semibold text-[#2E5BFF] dark:text-[#527dff] mt-2">
+              {isNewImage ? "New Preview" : "Click to Browse"}
+            </span>
           </div>
-          <button className="w-54 py-2 rounded-lg cursor-pointer hover:bg-blue-400 dark:hover:bg-blue-800 duration-200 ease-in-out bg-blue-600 text-white" onClick={handleProfileChange}>
-            Change Profile
+        </div>
+
+        <div className="flex items-center justify-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="py-2.5 px-5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleProfileChange}
+            disabled={loading || !isNewImage}
+            className="py-2.5 px-6 rounded-xl bg-[#2E5BFF] hover:bg-[#1d45e0] disabled:opacity-50 text-white font-semibold text-xs shadow-lg shadow-[#2E5BFF]/20 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+          >
+            {loading ? (
+              <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faCheck} className="text-xs" />
+                <span>Save Photo</span>
+              </>
+            )}
           </button>
         </div>
       </div>

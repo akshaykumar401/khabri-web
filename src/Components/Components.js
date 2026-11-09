@@ -21,6 +21,8 @@ import Login from "./AuthForms/Login.jsx";
 import SignUp from "./AuthForms/SignUp.jsx";
 import ForgetPassword from "./AuthForms/ForgetPassword.jsx";
 import AuthenticateForm from "./AuthForms/AuthenticateForm.jsx";
+import TiptapEditor from "./TiptapEditor.jsx";
+import { stripHtml, getReadingTime, getPostExcerpt } from "../Utils/textUtils.js";
 
 export {
   Header,
@@ -46,4 +48,8 @@ export {
   SignUp,
   ForgetPassword,
   AuthenticateForm,
+  TiptapEditor,
+  stripHtml,
+  getReadingTime,
+  getPostExcerpt,
 }

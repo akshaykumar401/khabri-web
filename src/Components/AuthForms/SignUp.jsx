@@ -1,5 +1,4 @@
 import React, { useState, useId } from "react";
-import Signup from "../../assets/SignUp.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelope,
@@ -7,188 +6,260 @@ import {
   faEyeSlash,
   faLock,
   faAt,
-  faSignature,
+  faUser,
+  faCamera,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { signUpUser, loginUser } from "../../Features/User/user.slice.js";
+import { viewAllPost } from "../../Features/Post/post.slice.js";
 import { ERROR } from "../Components.js";
+import brandLogo from "../../assets/brand-logo.png";
 
-const SignUp = ({ setIsLoggedIn }) => {
+const SignUp = ({ setActiveState, setIsLoggedIn }) => {
   const dispatch = useDispatch();
 
-  const [passwordState, setPasswordState] = useState("password");
+  const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
-  const [error, setError] = useState(null);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const ImageId = useId();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const imageId = useId();
 
-  // Display password Methode...
-  const displayPassword = () => {
-    if (passwordState === "password") {
-      setPasswordState("text");
-    } else {
-      setPasswordState("password");
-    }
-  };
-
-  // Handling Submit
   const handleSignUp = (e) => {
     e.preventDefault();
+    const formElement = e.target;
+    const emailVal = formElement.email.value;
+    const passwordVal = formElement.password.value;
+    const fullName = formElement.name.value;
+    const username = formElement.username.value;
 
-    if (
-      !e.target.email.value ||
-      !e.target.password.value ||
-      !e.target.name.value ||
-      !e.target.username.value
-    ) {
-      setError("Please fill all the fields");
+    if (!emailVal || !passwordVal || !fullName || !username) {
+      setError("Please fill all required fields");
       setIsErrorOpen(true);
-      setTimeout(() => {
-        setIsErrorOpen(false);
-      }, 3000);
+      setTimeout(() => setIsErrorOpen(false), 3000);
       return;
     }
 
-    const emailVal = e.target.email.value;
-    const passwordVal = e.target.password.value;
-    const formElement = e.target;
-
+    setLoading(true);
     const formData = new FormData();
     formData.append("email", emailVal);
     formData.append("password", passwordVal);
-    formData.append("fullName", e.target.name.value);
-    formData.append("username", e.target.username.value);
+    formData.append("fullName", fullName);
+    formData.append("username", username);
     if (profileImage) {
       formData.append("avator", profileImage);
     }
 
     dispatch(signUpUser(formData)).then((action) => {
-      if (action.type === "signUpUser/fulfilled") {
+      const isSuccess =
+        action.type === "signUpUser/fulfilled" ||
+        (typeof action.payload === 'string' && /success/i.test(action.payload));
+
+      if (isSuccess) {
         const userInfo = {
           email: emailVal,
           password: passwordVal,
         };
         formElement.reset();
-        dispatch(loginUser(userInfo)).then((action) => {
-          if (action.type === 'loginUser/fulfilled') {
+        dispatch(loginUser(userInfo)).then((loginAction) => {
+          setLoading(false);
+          if (loginAction.type === 'loginUser/fulfilled') {
             setIsLoggedIn(false);
+            dispatch(viewAllPost());
           } else {
             setIsLoggedIn(true);
           }
         });
+      } else {
+        setLoading(false);
+        setError(action.payload || "Registration failed");
+        setIsErrorOpen(true);
       }
     });
   };
 
   return (
-    <div className="bg-white sm:pb-0 pb-5 rounded-lg text-black flex-col-reverse items-center sm:flex-row sm:items-start flex justify-around w-full sm:h-full">
+    <div className="w-full animate-fade-in">
       {isErrorOpen && <ERROR text={error} setIsErrorOpen={setIsErrorOpen} />}
-      <div className="sm:w-[45%] w-[95%] py-4 pb-8 h-[95%] mt-2 sm:mt-4 p-2 border-1 rounded-lg">
-        <form className="flex flex-col gap-0.5" onSubmit={handleSignUp}>
-          <div className="flex items-center justify-between">
-            <label
-              className="text-xl bg-green-400 hover:bg-green-500 cursor-pointer duration-400 active:scale-95 ease-in-out font-['Titillium+Web'] border-1 p-2 rounded-lg mt-4"
-              htmlFor={ImageId}
-            >
-              Profile Picture
-            </label>
-            <input
-              type="file"
-              className="hidden"
-              name="avator"
-              id={ImageId}
-              onChange={(e) => setProfileImage(e.target.files[0])}
-            />
-            {profileImage && (
-              <img
-                src={URL.createObjectURL(profileImage)}
-                alt="profile"
-                className="h-16 w-16 rounded-full"
-              />
-            )}
-          </div>
-          <div className="border-1 p-2 rounded-lg mt-4">
-            <FontAwesomeIcon
-              icon={faSignature}
-              className="text-xl mr-2 font-light"
-            />
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="w-[80%] outline-none"
-              name="name"
-            />
-          </div>
-          <div className="border-1 p-2 rounded-lg mt-4">
-            <FontAwesomeIcon icon={faAt} className="text-xl mr-2 font-light" />
-            <input
-              type="text"
-              placeholder="Username"
-              className="w-[80%] outline-none"
-              name="username"
-            />
-          </div>
-          <div className="border-1 p-2 rounded-lg mt-4">
-            <FontAwesomeIcon
-              icon={faEnvelope}
-              className="text-xl mr-2 font-light"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-[80%] outline-none"
-              name="email"
-            />
-          </div>
-          <div className="border-1 p-2 rounded-lg mt-4 flex w-full">
-            <FontAwesomeIcon
-              icon={faLock}
-              className="text-xl mr-2 font-light"
-            />
-            <input
-              type={passwordState}
-              placeholder="Password"
-              className="outline-none w-[80%]"
-              name="password"
-            />
-            {passwordState === "password" ? (
-              <FontAwesomeIcon
-                icon={faEye}
-                className="text-xl mr-2 font-light cursor-pointer"
-                onClick={displayPassword}
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                className="text-xl mr-2 font-light cursor-pointer"
-                onClick={displayPassword}
-              />
-            )}
-          </div>
-          <button
-            type="submit"
-            className="bg-slate-500 text-white py-2 rounded-lg cursor-pointer mt-3 active:scale-95 duration-200 ease-in-out hover:bg-slate-600"
-          >
-            Sign Up
-          </button>
-        </form>
+
+      {/* Mobile Branding Header */}
+      <div className="md:hidden flex items-center gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+        <img
+          src={brandLogo}
+          alt="Khabri Logo"
+          className="w-10 h-10 rounded-xl object-contain bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 shadow-sm"
+        />
+        <div>
+          <h2 className="text-base font-extrabold font-brand tracking-tight text-[#1D3557] dark:text-white">
+            KHABRI
+          </h2>
+          <p className="text-[10px] uppercase font-bold tracking-wider text-[#2E5BFF]">
+            Your News. Amplified.
+          </p>
+        </div>
       </div>
 
-      <div className="sm:w-[50%] w-full">
-        <h2 className="pl-4 text-2xl sm:text-4xl font-semibold text-left font-['Tagesschrift'] mt-2">
-          Khabri
+      {/* Headline */}
+      <div className="mb-4">
+        <h2 className="text-xl sm:text-2xl font-bold font-brand tracking-tight text-slate-900 dark:text-white">
+          Create an account
         </h2>
-        <img
-          src={Signup}
-          alt="Welcome"
-          className="sm:w-[65%] w-[40%] mx-auto"
-        />
-        <h3 className="text-2xl font-semibold text-center font-['Titillium+Web']">
-          SignUp Here!
-        </h3>
-        <p className="text-lg sm:mt-0 text-gray-500 sm:w-full w-[80%] mx-auto text-center font-['Titillium+Web']">
-          To get started with Khabri, Please Sign Up to your Account by Filling
-          out the form.
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Join Khabri to broadcast reports and follow newsrooms.
+        </p>
+      </div>
+
+      <form className="space-y-3" onSubmit={handleSignUp}>
+        {/* Profile Avatar Upload Pill */}
+        <div className="flex items-center gap-3.5 p-2 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-dashed border-slate-200 dark:border-slate-700/80">
+          <div className="relative w-11 h-11 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-700 shrink-0 border-2 border-white dark:border-slate-800 shadow-xs">
+            {profileImage ? (
+              <img
+                src={URL.createObjectURL(profileImage)}
+                alt="Profile Preview"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-slate-400">
+                <FontAwesomeIcon icon={faUser} className="text-sm" />
+              </div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <label
+              htmlFor={imageId}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#2E5BFF]/10 text-[#2E5BFF] dark:text-[#527dff] text-xs font-semibold hover:bg-[#2E5BFF]/20 transition-colors cursor-pointer"
+            >
+              <FontAwesomeIcon icon={faCamera} className="text-[10px]" />
+              <span>{profileImage ? "Change Photo" : "Add Avatar"}</span>
+            </label>
+            <p className="text-[10px] text-slate-400 mt-0.5 truncate">Optional · JPG or PNG up to 5MB</p>
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            id={imageId}
+            className="hidden"
+            onChange={(e) => {
+              if (e.target.files?.[0]) setProfileImage(e.target.files[0]);
+            }}
+          />
+        </div>
+
+        {/* Name & Username Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Full Name
+            </label>
+            <div className="relative group">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+                <FontAwesomeIcon icon={faUser} className="text-xs" />
+              </span>
+              <input
+                type="text"
+                name="name"
+                placeholder="Jane Doe"
+                required
+                className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Username
+            </label>
+            <div className="relative group">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+                <FontAwesomeIcon icon={faAt} className="text-xs" />
+              </span>
+              <input
+                type="text"
+                name="username"
+                placeholder="janedoe"
+                required
+                className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            Email Address
+          </label>
+          <div className="relative group">
+            <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+              <FontAwesomeIcon icon={faEnvelope} className="text-xs" />
+            </span>
+            <input
+              type="email"
+              name="email"
+              placeholder="jane@domain.com"
+              required
+              className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+            />
+          </div>
+        </div>
+
+        {/* Password */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            Password
+          </label>
+          <div className="relative group">
+            <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+              <FontAwesomeIcon icon={faLock} className="text-xs" />
+            </span>
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Minimum 6 characters"
+              required
+              minLength={6}
+              className="w-full pl-8 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className="text-xs" />
+            </button>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full mt-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#1D3557] to-[#2E5BFF] hover:from-[#162a45] hover:to-[#2248db] text-white font-semibold text-xs sm:text-sm shadow-lg shadow-[#2E5BFF]/25 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+        >
+          {loading ? (
+            <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : (
+            <>
+              <span>Get Started</span>
+              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+            </>
+          )}
+        </button>
+      </form>
+
+      {/* Switch Tab Footer */}
+      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Already have an account?{" "}
+          <button
+            type="button"
+            onClick={() => setActiveState && setActiveState(0)}
+            className="font-bold text-[#2E5BFF] dark:text-[#527dff] hover:underline cursor-pointer"
+          >
+            Sign in
+          </button>
         </p>
       </div>
     </div>

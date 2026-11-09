@@ -18,7 +18,7 @@ export const loginUser = createAsyncThunk('loginUser', async (userData, { reject
   try {
     const response = await axios.post(`/apii/api/v1/uses/login`, userData);
 
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data.user;
     } else {
       return rejectWithValue(response.data?.message || "Failed to login");
@@ -36,7 +36,7 @@ export const getOtherUserData = createAsyncThunk('getOtherUserData', async (user
     const response = await axios.get(`/apii/api/v1/uses/otherUserProfile/${username}`, {
       withCredentials: true,
     });
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to get other user profile");
@@ -54,7 +54,7 @@ export const getFollowUserProfile = createAsyncThunk('getFollowUserProfile', asy
     const response = await axios.get(`/apii/api/v1/uses/following`, {
       withCredentials: true,
     });
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to get following profiles");
@@ -72,7 +72,7 @@ export const editUserProfilePhoto = createAsyncThunk('editUserProfilePhoto', asy
     const response = await axios.patch(`/apii/api/v1/uses/updateAvator`, image, {
       withCredentials: true,
     });
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to update profile photo");
@@ -91,7 +91,7 @@ export const editUserProfileDetail = createAsyncThunk('editUserProfileDetail', a
       withCredentials: true,
     });
 
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to update profile detail");
@@ -110,7 +110,7 @@ export const logoutUser = createAsyncThunk('logoutUser', async (_, { rejectWithV
       withCredentials: true,
     });
 
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to logout");
@@ -127,7 +127,7 @@ export const signUpUser = createAsyncThunk('signUpUser', async (data, { rejectWi
   try {
     const response = await axios.post(`/apii/api/v1/uses/sigin`, data);
 
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to sign up");
@@ -146,7 +146,7 @@ export const deleteUserAccount = createAsyncThunk('deleteUserAccount', async (_,
       withCredentials: true,
     });
 
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to delete profile");
@@ -163,7 +163,7 @@ export const changePassword = createAsyncThunk('changePassword', async (data, { 
   try {
     const response = await axios.post(`/apii/api/v1/uses/forgotPassword`, data);
 
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to reset password");
@@ -184,7 +184,7 @@ export const followUser = createAsyncThunk('followUser', async (id, { rejectWith
       },
       withCredentials: true,
     });
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to follow user");
@@ -205,7 +205,7 @@ export const unfollowUser = createAsyncThunk('unfollowUser', async (id, { reject
       },
       withCredentials: true,
     });
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to unfollow user");
@@ -245,6 +245,7 @@ export const userSlice = createSlice({
       // Handling Get Other User Profile...
       .addCase(getOtherUserData.pending, (state) => {
         state.loading = true;
+        state.otherUser = null;
         state.error = null;
       })
       .addCase(getOtherUserData.fulfilled, (state, action) => {

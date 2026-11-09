@@ -18,8 +18,8 @@ export const allUserPost = createAsyncThunk('allUserPost', async (_, { rejectWit
   try {
     const response = await axios.get(`/apii/api/v1/posts/viewUserPost`, { withCredentials: true });
 
-    if (response.status === 200) {
-      return response.data.data;
+    if (response.status >= 200 && response.status < 300) {
+      return response.data?.data || response.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to fetch user posts");
     }
@@ -36,8 +36,8 @@ export const viewPost = createAsyncThunk('viewPost', async (id, { rejectWithValu
     const response = await axios.get(`/apii/api/v1/posts/viewPost/${id}`, {
       withCredentials: true,
     });
-    if (response.status === 200) {
-      return response.data.data;
+    if (response.status >= 200 && response.status < 300) {
+      return response.data?.data || response.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to view post");
     }
@@ -54,8 +54,8 @@ export const likePost = createAsyncThunk('likePost', async (id, { rejectWithValu
     const response = await axios.patch(`/apii/api/v1/posts/likePost/${id}`, null, {
       withCredentials: true,
     });
-    if (response.status === 200) {
-      return response.data.data;
+    if (response.status >= 200 && response.status < 300) {
+      return response.data?.data || response.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to like post");
     }
@@ -72,8 +72,8 @@ export const dislikePost = createAsyncThunk('dislikePost', async (id, { rejectWi
     const response = await axios.patch(`/apii/api/v1/posts/dislikePost/${id}`, null, {
       withCredentials: true,
     });
-    if (response.status === 200) {
-      return response.data.data;
+    if (response.status >= 200 && response.status < 300) {
+      return response.data?.data || response.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to dislike post");
     }
@@ -90,7 +90,7 @@ export const deleteYourPost = createAsyncThunk('deleteYourPost', async (id, { re
     const response = await axios.get(`/apii/api/v1/posts/delete/${id}`, {
       withCredentials: true,
     });
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return id;
     } else {
       return rejectWithValue(response.data?.message || "Failed to delete post");
@@ -108,8 +108,8 @@ export const viewAllPost = createAsyncThunk('viewAllPost', async (_, { rejectWit
     const response = await axios.get(`/apii/api/v1/posts/viewAllpost`, {
       withCredentials: true,
     });
-    if (response.status === 200) {
-      return response.data.data;
+    if (response.status >= 200 && response.status < 300) {
+      return response.data?.data || response.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to fetch all posts");
     }
@@ -126,12 +126,19 @@ export const createUserPost = createAsyncThunk('createUserPost', async (data, { 
     const response = await axios.post(`/apii/api/v1/posts/createPost`, data, {
       withCredentials: true,
     });
-    if (response.status === 200) {
-      return response.data.data;
+    if (response.status >= 200 && response.status < 300) {
+      return response.data?.data || response.data?.message || response.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to create post");
     }
   } catch (error) {
+    // If the response payload contains a success indicator, treat as resolved
+    if (
+      (error.response?.status >= 200 && error.response?.status < 300) ||
+      (typeof error.response?.data?.message === 'string' && /success/i.test(error.response.data.message))
+    ) {
+      return error.response.data?.data || error.response.data?.message || error.response.data;
+    }
     const message = getErrorMessage(error);
     console.error(`ERROR: ${message}`);
     return rejectWithValue(message);
@@ -151,12 +158,18 @@ export const editUserPost = createAsyncThunk('editUserPost', async (data, { reje
       withCredentials: true,
     });
 
-    if (response.status === 200) {
-      return response.data.data;
+    if (response.status >= 200 && response.status < 300) {
+      return response.data?.data || response.data?.message || response.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to edit post");
     }
   } catch (error) {
+    if (
+      (error.response?.status >= 200 && error.response?.status < 300) ||
+      (typeof error.response?.data?.message === 'string' && /success/i.test(error.response.data.message))
+    ) {
+      return error.response.data?.data || error.response.data?.message || error.response.data;
+    }
     const message = getErrorMessage(error);
     console.error(`ERROR: ${message}`);
     return rejectWithValue(message);
@@ -254,9 +267,11 @@ export const postSlice = createSlice({
       })
       .addCase(createUserPost.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload) {
-          state.allPost.push(action.payload);
-          state.userPost.push(action.payload);
+        if (action.payload && typeof action.payload === 'object' && action.payload._id) {
+          if (!Array.isArray(state.allPost)) state.allPost = [];
+          if (!Array.isArray(state.userPost)) state.userPost = [];
+          state.allPost.unshift(action.payload);
+          state.userPost.unshift(action.payload);
         }
       })
       .addCase(createUserPost.rejected, (state, action) => {

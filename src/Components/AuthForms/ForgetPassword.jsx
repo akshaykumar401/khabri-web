@@ -1,113 +1,220 @@
-import React, {useState} from 'react';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAt, faEnvelope, faEye, faEyeSlash, faLock} from "@fortawesome/free-solid-svg-icons";
-import ForgetPass from "../../assets/ForgetPass.jpg";
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAt,
+  faEnvelope,
+  faEye,
+  faEyeSlash,
+  faLock,
+  faKey,
+  faArrowRight,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { ERROR, SUCCESSFUL } from '../Components.js';
 import { useDispatch } from 'react-redux';
 import { changePassword } from '../../Features/User/user.slice.js';
 
-const ForgetPassword = () => {
+const ForgetPassword = ({ setActiveState }) => {
   const dispatch = useDispatch();
 
-  const [passwordState, setPasswordState] = useState("password");
-  const [conformPasswordState, setConformPasswordState] = useState("password");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleForgetPassword = (e) => {
     e.preventDefault();
 
-    if (!e.target.email.value || !e.target.username.value || !e.target.conformPassword.value || !e.target.password.value ) {
+    const email = e.target.email.value;
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+    const confirmPassword = e.target.confirmPassword.value;
+    const formElement = e.target;
+
+    if (!email || !username || !password || !confirmPassword) {
       setError("Please fill all the fields");
       setIsErrorOpen(true);
-      setTimeout(() => {
-        setIsErrorOpen(false)
-      }, 3000);
+      setTimeout(() => setIsErrorOpen(false), 3000);
       return;
     }
 
-    if (e.target.conformPassword.value !== e.target.password.value) {
-      setError("Conform password does not match");
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
       setIsErrorOpen(true);
-      setTimeout(() => {
-        setIsErrorOpen(false)
-      }, 3000);
+      setTimeout(() => setIsErrorOpen(false), 3000);
       return;
     }
 
+    setLoading(true);
     const data = {
-      email: e.target.email.value,
-      username: e.target.username.value,
-      newPassword: e.target.password.value
-    }
+      email,
+      username,
+      newPassword: password,
+    };
 
     dispatch(changePassword(data)).then((action) => {
-      if (action.type === 'changePassword/fulfilled') {
-        setSuccess("Password changed successfully, please login");
+      setLoading(false);
+      const isSuccess =
+        action.type === 'changePassword/fulfilled' ||
+        (typeof action.payload === 'string' && /success/i.test(action.payload));
+
+      if (isSuccess) {
+        setSuccess("Password reset successfully! Redirecting to sign in...");
         setIsSuccessOpen(true);
+        formElement.reset();
         setTimeout(() => {
-          setIsSuccessOpen(false)
-        }, 3000);
-        e.target.reset();
+          setIsSuccessOpen(false);
+          if (setActiveState) setActiveState(0);
+        }, 1500);
+      } else {
+        setError(action.payload || "Failed to reset password");
+        setIsErrorOpen(true);
       }
     });
-  }
-
-  // Display conform password Methode...
-  const displayConformPassword = () => {
-    if(conformPasswordState === "password") {
-      setConformPasswordState("text");
-    } else {
-      setConformPasswordState("password");
-    }
-  }
-
-  // Display password Methode...
-  const displayPassword = () => {
-    if(passwordState === "password") {
-      setPasswordState("text");
-    } else {
-      setPasswordState("password");
-    }
-  }
+  };
 
   return (
-    <div className="bg-white sm:pb-0 pb-5 rounded-lg text-black flex-col-reverse items-center sm:flex-row sm:items-start flex justify-around w-full sm:h-full">
+    <div className="w-full animate-fade-in">
       {isErrorOpen && <ERROR text={error} setIsErrorOpen={setIsErrorOpen} />}
       {isSuccessOpen && <SUCCESSFUL text={success} setIsSuccessOpen={setIsSuccessOpen} />}
-      <div className="sm:w-[45%] w-[95%] py-4 pb-8 h-[90%] mt-2 sm:mt-4 p-2 border-1 rounded-lg">
-        <form className="flex flex-col gap-2" onSubmit={handleForgetPassword}>
-          <div className="border-1 p-2 rounded-lg mt-4">
-            <FontAwesomeIcon icon={faEnvelope} className="text-xl mr-2 font-light" />
-            <input type="email" placeholder="Email" className="w-[80%] outline-none" name="email"/>
-          </div>
-          <div className="border-1 p-2 rounded-lg mt-4">
-            <FontAwesomeIcon icon={faAt} className="text-xl mr-2 font-light" />
-            <input type="text" placeholder="Username" className="w-[80%] outline-none" name="username"/>
-          </div>
-          <div className="border-1 p-2 rounded-lg mt-4 flex w-full">
-            <FontAwesomeIcon icon={faLock} className="text-xl mr-2 font-light" />
-            <input type={passwordState} placeholder="New Password" className="outline-none w-[80%]" name="password"/>
-            {passwordState === "password" ? <FontAwesomeIcon icon={faEye} className="text-xl mr-2 font-light cursor-pointer" onClick={displayPassword}/> : <FontAwesomeIcon icon={faEyeSlash} className="text-xl mr-2 font-light cursor-pointer" onClick={displayPassword}/>}
-          </div>
-          <div className="border-1 p-2 rounded-lg mt-4 flex w-full">
-            <FontAwesomeIcon icon={faLock} className="text-xl mr-2 font-light" />
-            <input type={conformPasswordState} placeholder="Conform Password" className="outline-none w-[80%]" name="conformPassword"/>
-            {conformPasswordState === "password" ? <FontAwesomeIcon icon={faEye} className="text-xl mr-2 font-light cursor-pointer" onClick={displayConformPassword}/> : <FontAwesomeIcon icon={faEyeSlash} className="text-xl mr-2 font-light cursor-pointer" onClick={displayConformPassword}/>}
-          </div>
-          <button type="submit" className="bg-slate-500 text-white py-2 rounded-lg cursor-pointer mt-3 active:scale-95 duration-200 ease-in-out hover:bg-slate-600">Reset</button>
-        </form>
+
+      {/* Header */}
+      <div className="mb-5">
+        <div className="w-10 h-10 rounded-2xl bg-[#2E5BFF]/10 text-[#2E5BFF] dark:text-[#527dff] flex items-center justify-center mb-3">
+          <FontAwesomeIcon icon={faKey} className="text-base" />
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold font-brand tracking-tight text-slate-900 dark:text-white">
+          Reset password
+        </h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Verify your account email and username to choose a new password.
+        </p>
       </div>
 
-      <div className="sm:w-[50%] w-full">
-        <h2 className="pl-4 text-2xl sm:text-4xl font-semibold text-left font-['Tagesschrift'] mt-2">Khabri</h2>
-        <img src={ForgetPass} alt="Forget Password" className="sm:w-[65%] w-[40%] mx-auto mt-4" />
-        <h3 className="text-2xl font-semibold text-center font-['Titillium+Web']">Forget Password!</h3>
-        <p className="text-lg sm:mt-0 text-gray-500 sm:w-full w-[80%] mx-auto text-center font-['Titillium+Web']">
-          Fill out the form to reset your password.
-        </p>
+      <form className="space-y-3" onSubmit={handleForgetPassword}>
+        {/* Email */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            Account Email
+          </label>
+          <div className="relative group">
+            <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+              <FontAwesomeIcon icon={faEnvelope} className="text-xs" />
+            </span>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@domain.com"
+              required
+              className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+            />
+          </div>
+        </div>
+
+        {/* Username */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            Username
+          </label>
+          <div className="relative group">
+            <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+              <FontAwesomeIcon icon={faAt} className="text-xs" />
+            </span>
+            <input
+              type="text"
+              name="username"
+              placeholder="username"
+              required
+              className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+            />
+          </div>
+        </div>
+
+        {/* New Password & Confirm Password */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              New Password
+            </label>
+            <div className="relative group">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+                <FontAwesomeIcon icon={faLock} className="text-xs" />
+              </span>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="New password"
+                required
+                minLength={6}
+                className="w-full pl-8 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className="text-xs" />
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Confirm Password
+            </label>
+            <div className="relative group">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2E5BFF] transition-colors">
+                <FontAwesomeIcon icon={faLock} className="text-xs" />
+              </span>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm password"
+                required
+                minLength={6}
+                className="w-full pl-8 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#2E5BFF]/20 focus:border-[#2E5BFF] dark:focus:border-[#2E5BFF] transition-all shadow-xs"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
+              >
+                <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} className="text-xs" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full mt-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#1D3557] to-[#2E5BFF] hover:from-[#162a45] hover:to-[#2248db] text-white font-semibold text-xs sm:text-sm shadow-lg shadow-[#2E5BFF]/25 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+        >
+          {loading ? (
+            <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : (
+            <>
+              <span>Save New Password</span>
+              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+            </>
+          )}
+        </button>
+      </form>
+
+      {/* Switch Tab Footer */}
+      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+        <button
+          type="button"
+          onClick={() => setActiveState && setActiveState(0)}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2E5BFF] dark:text-[#527dff] hover:underline cursor-pointer"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} className="text-[10px]" />
+          <span>Back to Sign In</span>
+        </button>
       </div>
     </div>
   );

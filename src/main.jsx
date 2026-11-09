@@ -1,68 +1,73 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import React, { Suspense, lazy } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./App/Store.js";
+import { Loading1 } from "./Components/Components.js";
 
-import Home from './Pages/Home.jsx';
-import UploadPost from "./Pages/UploadPost.jsx";
-import User from "./Pages/User.jsx";
-import EditProfileDetail from "./Pages/EditProfileDetail.jsx";
-import EditProfilePhoto from "./Pages/EditProfilePhoto.jsx";
-import Followed from "./Pages/Followed.jsx";
-import PostDisplay from "./Pages/PostDisplay.jsx";
-import OtherUserProfile from "./Pages/OtherUserProfile.jsx";
-import EditPost from "./Pages/EditPost.jsx";
+const Home = lazy(() => import('./Pages/Home.jsx'));
+const UploadPost = lazy(() => import('./Pages/UploadPost.jsx'));
+const User = lazy(() => import('./Pages/User.jsx'));
+const EditProfileDetail = lazy(() => import('./Pages/EditProfileDetail.jsx'));
+const EditProfilePhoto = lazy(() => import('./Pages/EditProfilePhoto.jsx'));
+const Followed = lazy(() => import('./Pages/Followed.jsx'));
+const PostDisplay = lazy(() => import('./Pages/PostDisplay.jsx'));
+const OtherUserProfile = lazy(() => import('./Pages/OtherUserProfile.jsx'));
+const EditPost = lazy(() => import('./Pages/EditPost.jsx'));
+
+const renderWithSuspense = (node) => (
+  <Suspense fallback={<Loading1 />}>{node}</Suspense>
+);
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
+    element: <App />,
     children: [
       {
         path: "/",
-        element: <Home/>,
+        element: renderWithSuspense(<Home />),
       },
       {
         path: "/upload-post",
-        element: <UploadPost />,
+        element: renderWithSuspense(<UploadPost />),
       },
       {
         path: "/user",
-        element: <User />,
+        element: renderWithSuspense(<User />),
       },
       {
         path: "/edit-profile-detail",
-        element: <EditProfileDetail />,
+        element: renderWithSuspense(<EditProfileDetail />),
       },
       {
         path: "/edit-profile-photo",
-        element: <EditProfilePhoto/>,
+        element: renderWithSuspense(<EditProfilePhoto />),
       },
       {
         path: "/followed",
-        element: <Followed />,
+        element: renderWithSuspense(<Followed />),
       },
       {
         path: "/post-display/:id",
-        element: <PostDisplay />,
+        element: renderWithSuspense(<PostDisplay />),
       },
       {
         path: "/profile/:username",
-        element: <OtherUserProfile />,
+        element: renderWithSuspense(<OtherUserProfile />),
       },
       {
         path: "/edit-post/:postId",
-        element: <EditPost />,
-      }
-    ]
-  }
+        element: renderWithSuspense(<EditPost />),
+      },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <RouterProvider router={router} />
   </Provider>
-)
+);

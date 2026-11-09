@@ -18,7 +18,7 @@ export const sendCommentToBack = createAsyncThunk('sendCommentToBack', async (da
       withCredentials: true,
     });
 
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       return response.data;
     } else {
       return rejectWithValue(response.data?.message || "Failed to send comment");

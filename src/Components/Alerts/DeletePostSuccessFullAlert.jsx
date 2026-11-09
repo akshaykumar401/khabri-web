@@ -1,21 +1,23 @@
 import React from 'react';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const DeletePostSuccessFullAlert = ({ setPostDeletedAlert }) => {
-  const disappearAlert = () => {
-    setPostDeletedAlert(false);
-  }
-
   return (
-    <div className="z-[9999] fixed top-2 left-[50%] translate-x-[-50%] bg-green-300 h-24 text-black  rounded-lg w-[300px] flex items-end justify-end">
-      <div className="flex gap-1 w-[95%] h-full bg-slate-700 text-white  rounded-lg">
-        <div className="w-[85%]">
-          <h2 className="text-2xl font-semibold pl-4 pt-2">Success.</h2>
-          <p className="pl-4 text-gray-400">Deleted successfully.</p>
+    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] w-[90%] max-w-md animate-in fade-in slide-in-from-top-4 duration-300">
+      <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-emerald-500/30 shadow-xl shadow-emerald-500/10 text-slate-800 dark:text-slate-100">
+        <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-500 flex items-center justify-center shrink-0">
+          <FontAwesomeIcon icon={faCircleCheck} className="text-lg" />
         </div>
-        <button className="cursor-pointer rounded-full mt-2 ml-1 w-6 h-6 flex justify-center items-center text-white text-2xl hover:text-purple-500 duration-300 ease-in-out" onClick={disappearAlert}>
-          <FontAwesomeIcon icon={faXmark} />
+        <div className="flex-1 min-w-0">
+          <h4 className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">Post Deleted</h4>
+          <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">The post has been permanently removed.</p>
+        </div>
+        <button
+          onClick={() => setPostDeletedAlert(false)}
+          className="w-7 h-7 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer"
+        >
+          <FontAwesomeIcon icon={faXmark} className="text-sm" />
         </button>
       </div>
     </div>
