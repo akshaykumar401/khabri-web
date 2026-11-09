@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { followUser, unfollowUser } from '../Features/User/user.slice.js';
 
 const UsernameCard = ({ username, id }) => {
@@ -11,24 +11,25 @@ const UsernameCard = ({ username, id }) => {
 
   const openUserProfile = () => {
     navigate(`/profile/${username}`);
-  }
+  };
 
   const handleFollowButton = () => {
+    if (!id) return;
     if (!isFollowed) {
-      dispatch(followUser(id)).then((action) =>
-        SetIsFollowed(!isFollowed)
-      )
+      dispatch(followUser(id)).then(() =>
+        SetIsFollowed(true)
+      );
     } else {
-      dispatch(unfollowUser(id)).then((action) =>
-        SetIsFollowed(!isFollowed)
-      )
+      dispatch(unfollowUser(id)).then(() =>
+        SetIsFollowed(false)
+      );
     }
-  }
+  };
 
   return (
     <div className="w-[95%] bg-slate-500 mb-2 rounded-lg mx-auto flex justify-between items-center">
-      <div className="flex items-center gap-2 py-1 pl-5 cursor-pointer  w-[85%]" onClick={openUserProfile}>
-        <img src="https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc" alt="User Image" className="h-9 w-9 rounded-full" />
+      <div className="flex items-center gap-2 py-1 pl-5 cursor-pointer w-[85%]" onClick={openUserProfile}>
+        <img src="https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc" alt="User" className="h-9 w-9 rounded-full" />
         <span className="text-xl text-black">
           {username}
         </span>

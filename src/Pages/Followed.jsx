@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { UsernameCard } from "../Components/Components.js";
 import { useSelector, useDispatch } from 'react-redux';
 import { getFollowUserProfile } from '../Features/User/user.slice.js';
@@ -6,17 +6,12 @@ import { getFollowUserProfile } from '../Features/User/user.slice.js';
 const Followed = () => {
   const dispatch = useDispatch();
   const { followedUser } = useSelector((state) => state.user);
-  const [allProfile, setAllProfile] = useState([]);
 
   useEffect(() => {
-    dispatch(getFollowUserProfile())
-  }, [])
+    dispatch(getFollowUserProfile());
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (followedUser.length > 0) {
-      setAllProfile(followedUser);
-    }
-  }, [followedUser])
+  const allProfile = followedUser || [];
 
   return (
     <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">
@@ -25,21 +20,17 @@ const Followed = () => {
           All Followed
         </h2>
 
-      {allProfile?.length === 0 ? (
-        <h2 className="pl-8 text-xl mx-16 mt-2 mb-4 font-semibold">
-          No Followed
-        </h2>
-      ) : (
-        <>
-        {
-          allProfile.map((profile) => {
-            return (
+        {allProfile.length === 0 ? (
+          <h2 className="pl-8 text-xl mx-16 mt-2 mb-4 font-semibold">
+            No Followed
+          </h2>
+        ) : (
+          <>
+            {allProfile.map((profile) => (
               <UsernameCard key={profile._id} id={profile._id} username={profile.username} />
-            )
-          })
-        }
-        </>
-      )}
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

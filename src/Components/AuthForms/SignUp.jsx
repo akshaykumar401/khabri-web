@@ -49,28 +49,33 @@ const SignUp = ({ setIsLoggedIn }) => {
       return;
     }
 
+    const emailVal = e.target.email.value;
+    const passwordVal = e.target.password.value;
+    const formElement = e.target;
+
     const formData = new FormData();
-    formData.append("email", e.target.email.value);
-    formData.append("password", e.target.password.value);
+    formData.append("email", emailVal);
+    formData.append("password", passwordVal);
     formData.append("fullName", e.target.name.value);
     formData.append("username", e.target.username.value);
-    formData.append("avator", profileImage);
+    if (profileImage) {
+      formData.append("avator", profileImage);
+    }
 
     dispatch(signUpUser(formData)).then((action) => {
       if (action.type === "signUpUser/fulfilled") {
         const userInfo = {
-          email: e.target.email.value,
-          password: e.target.password.value
+          email: emailVal,
+          password: passwordVal,
         };
-        console.log(userInfo);
-        e.target.reset();
+        formElement.reset();
         dispatch(loginUser(userInfo)).then((action) => {
           if (action.type === 'loginUser/fulfilled') {
             setIsLoggedIn(false);
           } else {
             setIsLoggedIn(true);
           }
-        })
+        });
       }
     });
   };

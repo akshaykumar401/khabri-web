@@ -3,6 +3,10 @@
     {
       "source": "/apii/:path*",
       "destination": "https://newsbackend-sran.onrender.com/:path*"
+    },
+    {
+      "source": "/((?!assets/).*)",
+      "destination": "/index.html"
     }
   ]
 }

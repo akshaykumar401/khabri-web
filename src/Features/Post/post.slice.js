@@ -9,21 +9,26 @@ const initialState = {
   error: null,
 };
 
+const getErrorMessage = (error) => {
+  return error.response?.data?.message || error.response?.statusText || error.message || "An unexpected error occurred";
+};
+
 // Method for Fetching User Posts...
 export const allUserPost = createAsyncThunk('allUserPost', async (_, { rejectWithValue }) => {
   try {
     const response = await axios.get(`/apii/api/v1/posts/viewUserPost`, { withCredentials: true });
-  
+
     if (response.status === 200) {
       return response.data.data;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to fetch user posts");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
-})
+});
 
 // Methode For View Post...
 export const viewPost = createAsyncThunk('viewPost', async (id, { rejectWithValue }) => {
@@ -34,45 +39,48 @@ export const viewPost = createAsyncThunk('viewPost', async (id, { rejectWithValu
     if (response.status === 200) {
       return response.data.data;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to view post");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
 });
 
 // Like Post Methode...
 export const likePost = createAsyncThunk('likePost', async (id, { rejectWithValue }) => {
   try {
-    const response = await axios.patch(`/apii/api/v1/posts/likePost/${id}`, {
+    const response = await axios.patch(`/apii/api/v1/posts/likePost/${id}`, null, {
       withCredentials: true,
     });
     if (response.status === 200) {
       return response.data.data;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to like post");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
-})
+});
 
 // DisLike Post Methode...
 export const dislikePost = createAsyncThunk('dislikePost', async (id, { rejectWithValue }) => {
   try {
-    const response = await axios.patch(`/apii/api/v1/posts/dislikePost/${id}`, {
+    const response = await axios.patch(`/apii/api/v1/posts/dislikePost/${id}`, null, {
       withCredentials: true,
     });
     if (response.status === 200) {
       return response.data.data;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to dislike post");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
 });
 
@@ -85,11 +93,12 @@ export const deleteYourPost = createAsyncThunk('deleteYourPost', async (id, { re
     if (response.status === 200) {
       return id;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to delete post");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
 });
 
@@ -102,11 +111,12 @@ export const viewAllPost = createAsyncThunk('viewAllPost', async (_, { rejectWit
     if (response.status === 200) {
       return response.data.data;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to fetch all posts");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
 });
 
@@ -116,38 +126,42 @@ export const createUserPost = createAsyncThunk('createUserPost', async (data, { 
     const response = await axios.post(`/apii/api/v1/posts/createPost`, data, {
       withCredentials: true,
     });
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return response.data.data;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to create post");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
 });
 
-// Edid Post Methode...
+// Edit Post Methode...
 export const editUserPost = createAsyncThunk('editUserPost', async (data, { rejectWithValue }) => {
   try {
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
-    formData.append('image', data.image);
+    if (data.image) {
+      formData.append('image', data.image);
+    }
     const response = await axios.patch(`/apii/api/v1/posts/editPost/${data.id}`, formData, {
       withCredentials: true,
     });
-  
+
     if (response.status === 200) {
       return response.data.data;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to edit post");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
-})
+});
 
 // Post Slice for User Post and all Post Display...
 export const postSlice = createSlice({
@@ -167,7 +181,7 @@ export const postSlice = createSlice({
       })
       .addCase(allUserPost.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
+        state.error = action.payload || "Failed to fetch user posts";
       })
       // Handling View Post...
       .addCase(viewPost.pending, (state) => {
@@ -180,7 +194,7 @@ export const postSlice = createSlice({
       })
       .addCase(viewPost.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
+        state.error = action.payload || "Failed to view post";
       })
       // Handling The Like Post...
       .addCase(likePost.pending, (state) => {
@@ -192,7 +206,7 @@ export const postSlice = createSlice({
       })
       .addCase(likePost.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
+        state.error = action.payload || "Failed to like post";
       })
       // Handling The Dislike Post...
       .addCase(dislikePost.pending, (state) => {
@@ -204,7 +218,7 @@ export const postSlice = createSlice({
       })
       .addCase(dislikePost.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
+        state.error = action.payload || "Failed to dislike post";
       })
       // Handling The Delete Post...
       .addCase(deleteYourPost.pending, (state) => {
@@ -214,10 +228,11 @@ export const postSlice = createSlice({
       .addCase(deleteYourPost.fulfilled, (state, action) => {
         state.loading = false;
         state.userPost = state.userPost.filter((post) => post._id !== action.payload);
+        state.allPost = state.allPost.filter((post) => post._id !== action.payload);
       })
       .addCase(deleteYourPost.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
+        state.error = action.payload || "Failed to delete post";
       })
       // Handling The View All Post...
       .addCase(viewAllPost.pending, (state) => {
@@ -239,7 +254,10 @@ export const postSlice = createSlice({
       })
       .addCase(createUserPost.fulfilled, (state, action) => {
         state.loading = false;
-        state.allPost.push(action.payload)
+        if (action.payload) {
+          state.allPost.push(action.payload);
+          state.userPost.push(action.payload);
+        }
       })
       .addCase(createUserPost.rejected, (state, action) => {
         state.loading = false;
@@ -252,16 +270,20 @@ export const postSlice = createSlice({
       })
       .addCase(editUserPost.fulfilled, (state, action) => {
         state.loading = false;
-        state.allPost = [state.userPost.filter((singlePost) => {
-          return singlePost._id !== action.payload._id
-        }), action.payload]
+        if (action.payload && action.payload._id) {
+          state.allPost = state.allPost.map((post) =>
+            post._id === action.payload._id ? action.payload : post
+          );
+          state.userPost = state.userPost.map((post) =>
+            post._id === action.payload._id ? action.payload : post
+          );
+        }
       })
       .addCase(editUserPost.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
-      })
+        state.error = action.payload || "Failed to edit post";
+      });
   }
-})
+});
 
-// export const {} = postSlice.actions;
 export default postSlice.reducer;

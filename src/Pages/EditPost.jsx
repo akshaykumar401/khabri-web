@@ -1,9 +1,8 @@
-import React, { useState, useEffect} from 'react';
-import { useParams} from "react-router-dom";
-import {ERROR, SUCCESSFUL} from "../Components/Components.js";
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
+import { ERROR, SUCCESSFUL } from "../Components/Components.js";
 import { useSelector, useDispatch } from 'react-redux';
 import { editUserPost } from '../Features/Post/post.slice.js';
-import { useNavigate } from 'react-router-dom'; 
 
 const EditPost = () => {
   const dispatch = useDispatch();
@@ -17,19 +16,18 @@ const EditPost = () => {
 
   const [image, setImage] = useState("");
   const [oldImage, setOldImage] = useState("");
-  // let oldImage = "";
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
-    const post = userPost.find((post) => post._id === postId);
+    const post = userPost?.find((p) => p._id === postId);
     if (post) {
-      setTitle(post?.title);
-      setDescription(post?.description);
-      setOldImage(post?.referanceImage);
-      setImage(post?.referanceImage);
+      setTitle(post.title || "");
+      setDescription(post.description || "");
+      setOldImage(post.referanceImage || "");
+      setImage(post.referanceImage || "");
     }
-  }, [userPost])
+  }, [userPost, postId]);
 
   // Removing Error Alert in 3 Seconds
   useEffect(() => {
@@ -47,14 +45,13 @@ const EditPost = () => {
     if (isSuccessOpen) {
       const timer = setTimeout(() => {
         setIsSuccessOpen(false);
-
       }, 3000);
       return () => clearTimeout(timer);
     }
   }, [isSuccessOpen]);
 
   const handleSubmit = () => {
-    if (title === "" || description === "") {
+    if (!title.trim() || !description.trim()) {
       setIsErrorOpen(true);
       setErrorMessage("Please fill all the fields");
       return;
@@ -64,18 +61,31 @@ const EditPost = () => {
       id: postId,
       title: title,
       description: description,
-      image: image,
-    }
+      image: image instanceof File ? image : undefined,
+    };
 
     dispatch(editUserPost(data)).then((action) => {
-      if (action.payload._id === postId){
+      if (action.type === 'editUserPost/fulfilled') {
         setIsSuccessOpen(true);
         setSuccessMessage("Post Updated Successfully");
-        navigate("/user");
+        setTimeout(() => {
+          navigate("/user");
+        }, 1000);
       }
-    })
+    });
+  };
 
-  }
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+
+  const displayImageSrc =
+    image instanceof File || image instanceof Blob
+      ? URL.createObjectURL(image)
+      : oldImage || "";
 
   return (
     <div className="md:w-[calc(100%-310px)] h-auto bg-slate-300 flex md:ml-[305px] mt-14 drop-shadow-xl dark:bg-slate-900 justify-center z-10">
@@ -88,22 +98,44 @@ const EditPost = () => {
           EDIT POST
         </h2>
         {/* Image Upload */}
-        <input type="file" className="hidden" id="imageInpute" onChange={(e) => setImage(e.target.files[0])} />
-        <label htmlFor="imageInpute" className="cursor-pointer w-[30%] p-4 mb-2 bg-blue-600 rounded-lg" >Change Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          id="imageInpute"
+          onChange={handleImageChange}
+        />
+        <label htmlFor="imageInpute" className="cursor-pointer w-[30%] p-4 mb-2 bg-blue-600 text-white rounded-lg inline-block text-center" >
+          Change Image
+        </label>
 
         {/* Image Display */}
-        {/* Making this image if this is not url then convort to url */}
-        <div className="w-[95%] h-auto flex justify-center items-center">
-          <img src={image !== oldImage ? URL.createObjectURL(image) : oldImage} alt="Uploaded Image" className="w-full h-68 object-cover mt-6 rounded-lg" />
-        </div>
+        {displayImageSrc && (
+          <div className="w-[95%] h-auto flex justify-center items-center">
+            <img src={displayImageSrc} alt="Post" className="w-full h-68 object-cover mt-6 rounded-lg" />
+          </div>
+        )}
 
         {/* Title Text Area */}
-        <textarea className="w-full border-1 text-xl px-2 h-auto resize-none pt-2 mt-6 rounded-lg outline-none " maxLength="100" placeholder="Tille" id="title" value={title} onChange={(e) => setTitle(e.target.value)}></textarea>
+        <textarea
+          className="w-full border-1 text-xl px-2 h-auto resize-none pt-2 mt-6 rounded-lg outline-none"
+          maxLength={100}
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        ></textarea>
 
         {/* Description Text Area */}
-        <textarea className="w-full border-1 text-xl px-2 h-[60vh] resize-none pt-2 mt-2 rounded-lg outline-none " placeholder="Description" id="description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+        <textarea
+          className="w-full border-1 text-xl px-2 h-[60vh] resize-none pt-2 mt-2 rounded-lg outline-none"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        ></textarea>
 
-        <button className="w-[50%] bg-green-300 justify-center flex items-center mx-auto py-2 text-black text-xl mt-2 cursor-pointer hover:bg-green-400 rounded-lg" onClick={handleSubmit}>Post</button>
+        <button className="w-[50%] bg-green-300 justify-center flex items-center mx-auto py-2 text-black text-xl mt-2 cursor-pointer hover:bg-green-400 rounded-lg" onClick={handleSubmit}>
+          Update Post
+        </button>
       </div>
     </div>
   );

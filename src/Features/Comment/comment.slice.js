@@ -7,23 +7,28 @@ const initialState = {
   error: null,
 };
 
+const getErrorMessage = (error) => {
+  return error.response?.data?.message || error.response?.statusText || error.message || "An unexpected error occurred";
+};
+
 // Send Comment To Backend Methode...
 export const sendCommentToBack = createAsyncThunk('sendCommentToBack', async (data, { rejectWithValue }) => {
   try {
     const response = await axios.post(`/apii/api/v1/comments/sendComment`, data, {
       withCredentials: true,
     });
-  
+
     if (response.status === 200) {
       return response.data;
     } else {
-      return rejectWithValue(response.data.message);
+      return rejectWithValue(response.data?.message || "Failed to send comment");
     }
   } catch (error) {
-    console.error(`ERROR: ${error.response.statusText}`);
-    return rejectWithValue(error.response.statusText);
+    const message = getErrorMessage(error);
+    console.error(`ERROR: ${message}`);
+    return rejectWithValue(message);
   }
-})
+});
 
 // Comment Slice for Sending Comment...
 export const commentSlice = createSlice({
@@ -43,8 +48,8 @@ export const commentSlice = createSlice({
       })
       .addCase(sendCommentToBack.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to login";
-      })
+        state.error = action.payload || "Failed to send comment";
+      });
   }
 });
 

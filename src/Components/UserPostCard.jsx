@@ -14,40 +14,51 @@ const UserPostCard = ({ id }) => {
 
   // Filtering Post as The post id is Match...
   const { userPost } = useSelector((state) => state.post);
-  const singlePost = userPost.filter((post) => post._id === id);
+  const singlePost = userPost?.find((post) => post._id === id);
 
   const HandlePostClick = () => {
     navigate(`/post-display/${id}`);
-  }
+  };
 
   const handleEdit = () => {
     navigate(`/edit-post/${id}`);
-  }
+  };
 
   const displayMenu = () => {
     const list = document.getElementById(uniqueId);
+    if (!list) return;
 
     if (list.style.display === "flex") {
       list.style.display = "none";
     } else {
       list.style.display = "flex";
     }
-  }
+  };
 
   const deletePostAlert = () => {
-    document.getElementById(uniqueId).style.display = "none";
+    const list = document.getElementById(uniqueId);
+    if (list) list.style.display = "none";
     setIsAlertOpen(true);
+  };
+
+  if (!singlePost) {
+    return null;
   }
+
+  const avatarSrc =
+    singlePost.user?.avator && singlePost.user.avator !== "default.jpeg"
+      ? singlePost.user.avator
+      : "https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc";
 
   return (
     <div className="w-full bg-white  text-black px-4 py-2 dark:text-white dark:bg-slate-950 rounded-lg h-98 mb-5 mt-2 cursor-pointer">
-      {isAlertOpen && <DeletePostAlert id={id} />}
+      {isAlertOpen && <DeletePostAlert id={id} setIsAlertOpen={setIsAlertOpen} />}
       {postDeletedAlert && <DeletePostSuccessFullAlert setPostDeletedAlert={setPostDeletedAlert} />}
 
       <div className="w-[100%] py-4 h-10 mt-2 mx-auto rounded-lg bg-slate-600 justify-between flex px-4 items-center inset-shadow-sm inset-shadow-slate-800 text-white">
         <div className="flex gap-1.5 items-center justify-start w-[calc(100%-100px)]">
-          <img src={singlePost[0].user.avator !== "default.jpeg" ? singlePost[0].user.avator : "https://imgs.search.brave.com/mDztPWayQWWrIPAy2Hm_FNfDjDVgayj73RTnUIZ15L0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE1Lzg0LzQz/LzM2MF9GXzIxNTg0/NDMyNV90dFg5WWlJ/SXllYVI3TmU2RWFM/TGpNQW15NEd2UEM2/OS5qcGc"} alt="user image" className="rounded-full w-7 h-7" />
-          <span className="text-xl">{singlePost[0].user.avator ? singlePost[0].user.fullName : ""}</span>
+          <img src={avatarSrc} alt="user image" className="rounded-full w-7 h-7" />
+          <span className="text-xl">{singlePost.user?.fullName || ""}</span>
         </div>
 
         <button className={`text-white text-lg cursor-pointer  font-bold hover:scale-105 duration-300 ease-in-out font-['Titillium-Web'] w-8`} onClick={displayMenu}>
@@ -71,13 +82,13 @@ const UserPostCard = ({ id }) => {
 
       <div onClick={HandlePostClick}>
         <h2 className=" mt-2 font-['Titillium-Web'] w-full text-xl text-ellipsis line-clamp-2" >
-          {singlePost[0].title ? singlePost[0].title : ""}
+          {singlePost.title || ""}
         </h2>
 
-        <img src={singlePost[0].referanceImage ? singlePost[0].referanceImage : ""} alt="reference image" className="w-full h-48 mt-2 rounded-lg" />
+        <img src={singlePost.referanceImage || ""} alt="reference image" className="w-full h-48 mt-2 rounded-lg" />
 
         <p className="w-full mt-2 text-ellipsis line-clamp-2">
-          {singlePost[0].description ? singlePost[0].description : ""}
+          {singlePost.description || ""}
         </p>
       </div>
     </div>

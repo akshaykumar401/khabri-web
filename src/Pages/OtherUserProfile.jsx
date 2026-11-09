@@ -1,11 +1,11 @@
-import React, { useEffect, useState} from 'react';
-import { useParams  } from "react-router-dom"
+import React, { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
 import { ProfileHeader, PostCard } from "../Components/Components.js";
 import { useDispatch, useSelector } from 'react-redux';
 import { getOtherUserData } from '../Features/User/user.slice.js';
 
 const OtherUserProfile = () => {
-  const { username } = useParams()
+  const { username } = useParams();
   const dispatch = useDispatch();
   const [data, setData] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -13,16 +13,18 @@ const OtherUserProfile = () => {
   const { otherUser, userData } = useSelector((state) => state.user);
 
   useEffect(() => {
-    setData(otherUser);
-    setPosts(otherUser?.post);
-    setIsAdmin(otherUser?._id === userData?._id ? true : false)
-  }, [otherUser]);
+    if (otherUser) {
+      setData(otherUser);
+      setPosts(otherUser.post || []);
+      setIsAdmin(Boolean(otherUser._id && userData?._id && otherUser._id === userData._id));
+    }
+  }, [otherUser, userData]);
 
   useEffect(() => {
-    if (userData) {
-      dispatch(getOtherUserData(username))
+    if (username) {
+      dispatch(getOtherUserData(username));
     }
-  }, [otherUser, dispatch, username]);
+  }, [username, dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -33,7 +35,7 @@ const OtherUserProfile = () => {
       <div className="w-xl dark:bg-slate-800 dark:text-white bg-gray-300 text-black px-4 py-2 rounded-lg">
         {/* Profile Header Component */}
         <ProfileHeader
-          username={ data ? data?.fullName : "" }
+          username={data ? data?.fullName : ""}
           totalPost={data && data?.post ? data?.post.length : 0}
           totalFollower={data && data?.followers ? data?.followers.length : 0}
           totalFollowing={data && data?.following ? data?.following.length : 0}
@@ -47,8 +49,8 @@ const OtherUserProfile = () => {
           </h2>
 
           {data && posts?.length > 0 ? (
-            posts?.map((singlePost) => (
-              <PostCard id={singlePost._id} key={singlePost._id} isFollowButton={isAdmin} username={username}/>
+            posts.map((singlePost) => (
+              <PostCard id={singlePost._id} key={singlePost._id} isFollowButton={isAdmin} username={username} />
             ))
           ) : (
             <p className="pl-8">No posts available.</p>

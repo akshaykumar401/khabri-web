@@ -16,32 +16,32 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchUserData = async () => {
-    try {
-      const response = await axios.get(`/apii/api/v1/uses/generateReferanceToken`, {
-        withCredentials: true,
-      });
-
-      setIsLoading(false);
-      if (response.data.statusCode === 200) {
-        setIsLoggedIn(false);
-        dispatch(refreshUser(response.data.data.user))
-      } else {
-        setIsLoading(false);
-        setIsLoggedIn(true);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      setIsLoggedIn(true);
-      console.error("ERROR: ", error.response?.data?.message || error.message);
-    }
-  };
-
   // Checking User is Logged In or Not
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`/apii/api/v1/uses/generateReferanceToken`, {
+          withCredentials: true,
+        });
+
+        setIsLoading(false);
+        if (response.data.statusCode === 200) {
+          setIsLoggedIn(false);
+          dispatch(refreshUser(response.data.data.user));
+        } else {
+          setIsLoading(false);
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        setIsLoggedIn(true);
+        console.error("ERROR: ", error.response?.data?.message || error.message);
+      }
+    };
+
     setIsLoading(true);
     fetchUserData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="h-screen w-full flex flex-wrap dark:text-white text-black">

@@ -4,22 +4,27 @@ import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from 'react-redux';
 import { deleteYourPost } from '../../Features/Post/post.slice.js';
 
-const DeletePostAlert = ({ id }) => {
+const DeletePostAlert = ({ id, setIsAlertOpen }) => {
   const dispatch = useDispatch();
 
   // Handle Cancel Button Event...
   const cancelHandle = () => {
-    setIsAlertOpen(false);
-  }
+    if (setIsAlertOpen) {
+      setIsAlertOpen(false);
+    }
+  };
 
-  // Handle Logout Button Event...
+  // Handle Delete Button Event...
   const deletePost = () => {
     dispatch(deleteYourPost(id)).then((action) => {
-      if(action.payload === id) {
-        alert("Post Deleted Successfully")
+      if (action.payload === id) {
+        alert("Post Deleted Successfully");
+        if (setIsAlertOpen) {
+          setIsAlertOpen(false);
+        }
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="w-[300px] h-[390px] p-4  z-[9999] bg-white rounded-md  left-[50%] translate-x-[-50%] absolute  ">

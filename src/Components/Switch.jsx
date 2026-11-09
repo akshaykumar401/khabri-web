@@ -21,7 +21,7 @@ const Switch = () => {
   return (
     <StyledWrapper>
       <label className="switch">
-        <input id="input" type="checkbox" defaultChecked="darkTheme" onClick={handdleTheme} />
+        <input id="input" type="checkbox" defaultChecked={true} onChange={handdleTheme} />
         <div className="slider round">
           <div className="sun-moon">
             <svg id="moon-dot-1" className="moon-dot" viewBox="0 0 100 100">
